@@ -23,36 +23,6 @@ function join_paths(?string $basePath, string ...$paths): string
 }
 
 /**
- * Transform realpath to alias path.
- *
- * @api
- *
- * @param  string  $path
- * @param  string|null  $workingPath
- * @return string
- */
-function transform_realpath_to_relative(string $path, ?string $workingPath = null, string $prefix = ''): string
-{
-    $separator = DIRECTORY_SEPARATOR;
-
-    if (! \is_null($workingPath)) {
-        return str_replace(rtrim($workingPath, $separator).$separator, $prefix.$separator, $path);
-    }
-
-    $laravelPath = base_path();
-    $workbenchPath = workbench_path();
-    $packagePath = package_path();
-
-    return match (true) {
-        str_starts_with($path, $laravelPath) => str_replace($laravelPath.$separator, '@laravel'.$separator, $path),
-        str_starts_with($path, $workbenchPath) => str_replace($workbenchPath.$separator, '@workbench'.$separator, $path),
-        str_starts_with($path, $packagePath) => str_replace($packagePath.$separator, '.'.$separator, $path),
-        ! empty($prefix) => implode($separator, [$prefix, ltrim($path, $separator)]),
-        default => $path,
-    };
-}
-
-/**
  * Transform relative path.
  *
  * @api
@@ -91,12 +61,15 @@ function laravel_version_compare(string $version, ?string $operator = null): int
         throw new RuntimeException('Unable to verify Laravel Framework version');
     }
 
-    /** @var string $laravel */
+    /**
+     * @var string $laravel
+     * @phpstan-ignore argument.templateType
+     */
     $laravel = transform(
         Application::VERSION,
         fn (string $version) => match (true) {
             $version === '12.x-dev' => '12.0.0',
-            default => $version, // @phpstan-ignore identical.alwaysTrue
+            default => $version,
         }
     );
 
