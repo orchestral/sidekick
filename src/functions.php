@@ -2,9 +2,31 @@
 
 namespace Orchestra\Sidekick;
 
+use Closure;
 use Illuminate\Foundation\Application;
 use PHPUnit\Runner\Version;
 use RuntimeException;
+
+/**
+ * Run callback only once.
+ *
+ * @api
+ *
+ * @param  mixed  $callback
+ * @return \Closure():mixed
+ */
+function once($callback): Closure
+{
+    $response = new UndefinedValue;
+
+    return function () use ($callback, &$response) {
+        if ($response instanceof UndefinedValue) {
+            $response = value($callback) ?? null;
+        }
+
+        return $response;
+    };
+}
 
 /**
  * Join the given paths together.
