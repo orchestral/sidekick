@@ -7,6 +7,7 @@ it('can use `once()`', function ($value) {
 
     $response = once(function () use ($value, &$counter) {
         $counter++;
+
         return $value;
     });
 
