@@ -29,12 +29,26 @@
     },
     "require-dev": {
         "illuminate/support": "^9.52.18 || ^10.0 || ^11.0 || ^12.0",
-        "pestphp/pest": "^1.0 || ^2.0 || ^3.0"
+        "laravel/pint": "^1.4",
+        "pestphp/pest": "^1.0 || ^2.0 || ^3.0",
+        "phpstan/phpstan": "^2.1"
     },
     "config": {
+        "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
+    },
+    "scripts": {
+        "lint": [
+            "@php vendor/bin/pint",
+            "@php vendor/bin/phpstan analyse --verbose"
+        ],
+        "test": "@php vendor/bin/pest",
+        "ci": [
+            "@lint",
+            "@test"
+        ]
     },
     "minimum-stability": "stable"
 }

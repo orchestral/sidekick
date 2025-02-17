@@ -26,10 +26,6 @@ function join_paths(?string $basePath, string ...$paths): string
  * Transform realpath to alias path.
  *
  * @api
- *
- * @param  string  $path
- * @param  string|null  $workingPath
- * @return string
  */
 function transform_realpath_to_relative(string $path, ?string $workingPath = null, string $prefix = ''): string
 {
@@ -56,10 +52,6 @@ function transform_realpath_to_relative(string $path, ?string $workingPath = nul
  * Transform relative path.
  *
  * @api
- *
- * @param  string  $path
- * @param  string  $workingPath
- * @return string
  */
 function transform_relative_path(string $path, string $workingPath): string
 {
@@ -74,10 +66,6 @@ function transform_relative_path(string $path, string $workingPath): string
  * @api
  *
  * @template TOperator of string|null
- *
- * @param  string  $version
- * @param  string|null  $operator
- * @return int|bool
  *
  * @phpstan-param  TOperator  $operator
  *
@@ -113,10 +101,6 @@ function laravel_version_compare(string $version, ?string $operator = null): int
  * @api
  *
  * @template TOperator of string|null
- *
- * @param  string  $version
- * @param  string|null  $operator
- * @return int|bool
  *
  * @throws \RuntimeException
  *
