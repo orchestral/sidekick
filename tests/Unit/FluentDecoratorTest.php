@@ -76,8 +76,7 @@ it('can set fluent attribute using method call', function () {
     expect($fluent['laravel'])->toBe('12.0.0');
 });
 
-function newFluent(): array
-{
+function newFluent(): array {
     $attributes = ['testbench' => true, 'class' => __CLASS__];
 
     return [
