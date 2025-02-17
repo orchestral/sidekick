@@ -8,6 +8,10 @@ use RuntimeException;
 
 /**
  * Join the given paths together.
+ *
+ * @param  string|null  $basePath
+ * @param  string  ...$paths
+ * @return string
  */
 function join_paths(?string $basePath, string ...$paths): string
 {
