@@ -122,7 +122,6 @@ function phpunit_version_compare(string $version, ?string $operator = null): int
     return version_compare($phpunit, $version, $operator);
 }
 
-
 /**
  * Determine the PHP Binary.
  *
