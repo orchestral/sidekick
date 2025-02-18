@@ -94,8 +94,9 @@ function laravel_version_compare(string $version, ?string $operator = null): int
      */
     $laravel = transform(
         Application::VERSION,
-        fn (string $version) => match (true) {
-            $version === '12.x-dev' => '12.0.0',
+        fn (string $version) => match ($version) {
+            '13.x-dev' => '13.0.0',
+            '12.x-dev' => '12.0.0',
             default => $version,
         }
     );
