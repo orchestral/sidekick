@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  integration-tests:
+  laravel-tests:
     runs-on: "ubuntu-latest"
     continue-on-error: ${{ matrix.experimental }}
     strategy:
@@ -54,7 +54,7 @@ jobs:
         uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--prefer-dist --no-cache --with=illuminate/support:^${{ matrix.laravel }}"
+          composer-options: "--prefer-dist --no-cache --with=laravel/framework:^${{ matrix.laravel }}"
 
       - name: Installed dependencies
         run: composer show -D
