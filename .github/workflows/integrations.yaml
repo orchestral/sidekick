@@ -27,14 +27,19 @@ jobs:
           - false
         include:
           - laravel: 13
+            phpunit: '^11.0'
             php: 8.3
           - laravel: 12
+            phpunit: '^11.0'
             php: 8.2
           - laravel: 11
+            phpunit: '^10.0'
             php: 8.2
           - laravel: 10
+            phpunit: '^10.0'
             php: 8.1
           - laravel: 9
+            phpunit: '^9.0'
             php: '8.0'
 
     name: Laravel:${{ matrix.laravel }} / PHP:${{ matrix.php }} ${{ matrix.dependencies == 'highest' && '⬆️' || '⬇️' }}
@@ -54,10 +59,15 @@ jobs:
         uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--prefer-dist --no-cache --with=laravel/framework:^${{ matrix.laravel }}"
+          composer-options: "--prefer-dist --no-cache --with=laravel/framework:^${{ matrix.laravel }} --with=phpunit/phpunit:${{ matrix.phpunit }}"
 
       - name: Installed dependencies
         run: composer show -D
+
+      - name: Update PHPUnit Configuration
+        run: |
+          vendor/bin/phpunit --migrate-configuration
+        if: matrix.php >= 8.1
 
       - name: Execute tests
         run: |
@@ -79,7 +89,7 @@ jobs:
         experimental:
           - false
         include:
-          - phpunit: '~12.0.0'
+          - phpunit: '^12.0'
             php: 8.3
           - phpunit: '^11.0'
             php: 8.2
