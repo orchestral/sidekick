@@ -1,66 +1,93 @@
 <?php
 
+namespace Orchestra\Sidekick\Tests\Unit\Functions;
+
 use Illuminate\Container\Container;
+use PHPUnit\Framework\TestCase;
 
 use function Orchestra\Sidekick\once;
 
-beforeEach(function () {
-    $this->app = new Container;
-});
+class OnceTest extends TestCase
+{
+    protected $app;
 
-afterEach(function () {
-    unset($this->app);
-});
+    /** {@inheritDoc} */
+    #[\Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-it('can use `once()`', function ($value) {
-    $counter = 0;
+        $this->app = new Container;
+    }
 
-    $response = once(function () use ($value, &$counter) {
-        $counter++;
+    /** {@inheritDoc} */
+    #[\Override]
+    protected function tearDown(): void
+    {
+        unset($this->app);
 
-        return $value;
-    });
+        parent::tearDown();
+    }
 
-    expect($counter)->toBe(0);
+    /**
+     * @dataProvider onceDataProvider
+     */
+    public function test_it_can_cache_the_result($value)
+    {
+        $counter = 0;
 
-    expect($response())->toBe($value);
-    expect($counter)->toBe(1);
+        $response = once(function () use ($value, &$counter) {
+            $counter++;
 
-    expect($response())->toBe($value);
-    expect($counter)->toBe(1);
-})->with([
-    [null],
-    ['workbench'],
-    [100_000],
-]);
-
-it('can only resolve value once', function () {
-    $stub = once(function () {
-        $this->app->instance(__CLASS__.'.once', time());
-    });
-    $stub2 = once(function () {
-        $this->app->instance(__CLASS__.'.once2', $response = time());
-
-        return tap(time(), function ($response) {
-            $this->app->instance(__CLASS__.'.once2', $response);
+            return $value;
         });
-    });
 
-    $this->assertFalse($this->app->bound(__CLASS__.'.once'));
-    $this->assertFalse($this->app->bound(__CLASS__.'.once2'));
+        $this->assertSame(0, $counter);
 
-    value($stub);
+        $this->assertSame($value, $response());
+        $this->assertSame(1, $counter);
 
-    $this->assertTrue($this->app->bound(__CLASS__.'.once'));
-    $this->assertFalse($this->app->bound(__CLASS__.'.once2'));
+        $this->assertSame($value, $response());
+        $this->assertSame(1, $counter);
+    }
 
-    tap($this->app[__CLASS__.'.once'], function ($time) use ($stub) {
+    public static function onceDataProvider()
+    {
+        yield [null];
+        yield ['Workbench'];
+        yield [100_000];
+        yield [['foo' => 'bar']];
+    }
+
+    public function test_it_can_cache_object()
+    {
+        $stub = once(function () {
+            $this->app->instance(__CLASS__.'.once', time());
+        });
+        $stub2 = once(function () {
+            $this->app->instance(__CLASS__.'.once2', $response = time());
+
+            return tap(time(), function ($response) {
+                $this->app->instance(__CLASS__.'.once2', $response);
+            });
+        });
+
+        $this->assertFalse($this->app->bound(__CLASS__.'.once'));
+        $this->assertFalse($this->app->bound(__CLASS__.'.once2'));
+
         value($stub);
-        $this->assertSame($time, $this->app[__CLASS__.'.once']);
-    });
 
-    $response = value($stub2);
+        $this->assertTrue($this->app->bound(__CLASS__.'.once'));
+        $this->assertFalse($this->app->bound(__CLASS__.'.once2'));
 
-    $this->assertTrue($this->app->bound(__CLASS__.'.once2'));
-    $this->assertSame($response, $this->app[__CLASS__.'.once2']);
-});
+        tap($this->app[__CLASS__.'.once'], function ($time) use ($stub) {
+            value($stub);
+            $this->assertSame($time, $this->app[__CLASS__.'.once']);
+        });
+
+        $response = value($stub2);
+
+        $this->assertTrue($this->app->bound(__CLASS__.'.once2'));
+        $this->assertSame($response, $this->app[__CLASS__.'.once2']);
+    }
+}
