@@ -45,7 +45,7 @@
             "@php vendor/bin/pint",
             "@php vendor/bin/phpstan analyse --verbose"
         ],
-        "test": "@php vendor/bin/pest",
+        "test": "@php vendor/bin/phpunit",
         "ci": [
             "@lint",
             "@test"
