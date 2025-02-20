@@ -1,11 +1,19 @@
 <?php
 
+namespace Orchestra\Sidekick\Tests\Unit\Functions;
+
+use PHPUnit\Framework\TestCase;
 use function Orchestra\Sidekick\join_paths;
 
-it('can resolve path using `join_paths()`', function () {
-    expect(realpath(__DIR__.'/JoinPathsTest.php'))
-        ->toBe(join_paths(__DIR__, 'JoinPathsTest.php'));
+class JoinPathsTest extends TestCase
+{
+    public function test_it_can_resolve_path () {
+        $this->assertSame(
+            realpath(__DIR__.'/JoinPathsTest.php'), join_paths(__DIR__, 'JoinPathsTest.php')
+        );
 
-    expect(realpath(__DIR__.'/JoinPathsTest.php'))
-        ->toBe(join_paths(__DIR__, '', 'JoinPathsTest.php'));
-});
+        $this->assertSame(
+            realpath(__DIR__.'/JoinPathsTest.php'), join_paths(__DIR__, '', 'JoinPathsTest.php')
+        );
+    }
+}

@@ -1,20 +1,26 @@
 <?php
 
+namespace Orchestra\Sidekick\Tests\Unit;
+
 use Orchestra\Sidekick\UndefinedValue;
+use PHPUnit\Framework\TestCase;
 
-it('can be resolved', function () {
-    $stub = new UndefinedValue;
+class UndefinedValueTest extends TestCase
+{
+    public function test_it_can_be_resolved() {
+        $stub = new UndefinedValue;
 
-    expect($stub)->toBeInstanceOf(UndefinedValue::class);
-    expect(UndefinedValue::equalsTo($stub))->toBeTrue();
-    expect(UndefinedValue::equalsTo(null))->toBeTrue();
-    expect(UndefinedValue::equalsTo('Testbench'))->toBeFalse();
-    expect(UndefinedValue::equalsTo(''))->toBeFalse();
-});
+        $this->assertInstanceOf(UndefinedValue::class, $stub);
+        $this->assertTrue(UndefinedValue::equalsTo($stub));
+        $this->assertTrue(UndefinedValue::equalsTo(null));
+        $this->assertFalse(UndefinedValue::equalsTo('Testbench'));
+        $this->assertFalse(UndefinedValue::equalsTo(''));
+    }
 
-it('can be serialized', function () {
-    $stub = new UndefinedValue;
+    public function test_it_can_be_serialized() {
+        $stub = new UndefinedValue;
 
-    expect($stub->jsonSerialize())->toBeNull();
-    expect(json_encode(['content' => $stub], true))->toBe('{"content":null}');
-});
+        $this->assertNull($stub->jsonSerialize());
+        $this->assertSame('{"content":null}', json_encode(['content' => $stub], true));
+    }
+}

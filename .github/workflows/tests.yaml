@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  tests-on-pest-3:
+  tests-on-phpunit11:
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     strategy:
@@ -41,17 +41,17 @@ jobs:
         uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--prefer-dist --no-cache --with=pestphp/pest:^3.0"
+          composer-options: "--prefer-dist --no-cache --with=phpunit/phpunit:^11.0"
 
       - name: Installed dependencies
         run: composer show -D
 
       - name: Execute tests
         run: |
-          vendor/bin/pest --migrate-configuration
-          vendor/bin/pest
+          vendor/bin/phpunit --migrate-configuration
+          vendor/bin/phpunit
 
-  tests-on-pest-2:
+  tests-on-phpunit10:
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     strategy:
@@ -84,17 +84,17 @@ jobs:
         uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--prefer-dist --no-cache --with=pestphp/pest:^2.0"
+          composer-options: "--prefer-dist --no-cache --with=phpunit/phpunit:^10.0"
 
       - name: Installed dependencies
         run: composer show -D
 
       - name: Execute tests
         run: |
-          vendor/bin/pest --migrate-configuration
-          vendor/bin/pest
+          vendor/bin/phpunit --migrate-configuration
+          vendor/bin/phpunit
 
-  tests-on-pest-1:
+  tests-on-phpunit9:
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     strategy:
@@ -110,7 +110,7 @@ jobs:
         experimental:
           - false
 
-    name: PHP${{ matrix.php }} / OS:${{ matrix.os }} ${{ matrix.dependencies == 'highest' && '⬆️' || '⬇️' }}
+    name: PHP:${{ matrix.php }} / OS:${{ matrix.os }} ${{ matrix.dependencies == 'highest' && '⬆️' || '⬇️' }}
 
     steps:
       - name: Checkout code
@@ -127,11 +127,11 @@ jobs:
         uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--prefer-dist --no-cache --with=pestphp/pest:^1.0"
+          composer-options: "--prefer-dist --no-cache --with=phpunit/phpunit:^9.6"
 
       - name: Installed dependencies
         run: composer show -D
 
       - name: Execute tests
         run: |
-          vendor/bin/pest
+          vendor/bin/phpunit
