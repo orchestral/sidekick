@@ -1,90 +1,104 @@
 <?php
 
-namespace Orchestra\Testbench\Tests\Support;
+namespace Orchestra\Sidekick\Tests\Unit;
 
 use Orchestra\Sidekick\FluentDecorator;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 
-it('can utilise fluent features', function () {
-    [$fluent, $attributes] = newFluent();
-
-    expect(isset($fluent['testbench']))->toBeTrue();
-    expect(isset($fluent['class']))->toBeTrue();
-    expect(isset($fluent['workbench']))->toBeFalse();
-
-    expect($fluent['testbench'])->toBeTrue();
-    expect($fluent['workbench'])->toBeNull();
-
-    expect($attributes)->toBe($fluent->getAttributes());
-    expect($attributes)->toBe($fluent->toArray());
-    expect(json_encode($attributes))->toBe($fluent->toJson());
-    expect($attributes)->toBe($fluent->jsonSerialize());
-});
-
-it('can utilise fluent as object', function () {
-    [$fluent] = newFluent();
-
-    expect(isset($fluent->laravel))->toBeFalse();
-    expect(isset($fluent->file))->toBeFalse();
-    expect($fluent->laravel)->toBeNull();
-    expect($fluent->file)->toBeNull();
-
-    $fluent->laravel = '12.0.0';
-    $fluent->file = __FILE__;
-
-    expect(isset($fluent->laravel))->toBeTrue();
-    expect(isset($fluent->file))->toBeTrue();
-    expect($fluent->laravel)->toBe('12.0.0');
-    expect($fluent->file)->toBe(__FILE__);
-
-    unset($fluent->file);
-
-    expect(isset($fluent->laravel))->toBeTrue();
-    expect(isset($fluent->file))->toBeFalse();
-});
-
-it('can utilise fluent as array', function () {
-    [$fluent] = newFluent();
-
-    expect(isset($fluent['laravel']))->toBeFalse();
-    expect(isset($fluent['file']))->toBeFalse();
-    expect($fluent['laravel'])->toBeNull();
-    expect($fluent['file'])->toBeNull();
-
-    $fluent['laravel'] = '12.0.0';
-    $fluent['file'] = __FILE__;
-
-    expect(isset($fluent['laravel']))->toBeTrue();
-    expect(isset($fluent['file']))->toBeTrue();
-    expect($fluent['laravel'])->toBe('12.0.0');
-    expect($fluent['file'])->toBe(__FILE__);
-
-    unset($fluent['file']);
-
-    expect(isset($fluent['laravel']))->toBeTrue();
-    expect(isset($fluent['file']))->toBeFalse();
-});
-
-it('can set fluent attribute using method call', function () {
-    [$fluent] = newFluent();
-
-    expect(isset($fluent['laravel']))->toBeFalse();
-    expect($fluent['laravel'])->toBeNull();
-
-    expect($fluent->laravel('12.0.0'))->toBeInstanceOf(FluentDecorator::class);
-
-    expect(isset($fluent['laravel']))->toBeTrue();
-    expect($fluent['laravel'])->toBe('12.0.0');
-});
-
-function newFluent(): array
+class FluentDecoratorTest extends TestCase
 {
-    $attributes = ['testbench' => true, 'class' => __CLASS__];
+    public function test_it_can_utilise_fluent_features()
+    {
+        [$fluent, $attributes] = $this->newFluent();
 
-    return [
-        new class($attributes) extends FluentDecorator
-        {
-            // ...
-        },
-        $attributes,
-    ];
+        $this->assertTrue(isset($fluent['testbench']));
+        $this->assertTrue(isset($fluent['class']));
+        $this->assertFalse(isset($fluent['workbench']));
+
+        $this->assertTrue($fluent['testbench']);
+        $this->assertNull($fluent['workbench']);
+
+        $this->assertSame($attributes, $fluent->getAttributes());
+        $this->assertSame($attributes, $fluent->toArray());
+        $this->assertSame(json_encode($attributes), $fluent->toJson());
+        $this->assertSame($attributes, $fluent->jsonSerialize());
+    }
+
+    public function test_it_can_utilise_fluent_as_object()
+    {
+        [$fluent] = $this->newFluent();
+
+        $this->assertFalse(isset($fluent->laravel));
+        $this->assertFalse(isset($fluent->file));
+        $this->assertNull($fluent->laravel);
+        $this->assertNull($fluent->file);
+
+        $fluent->laravel = '12.0.0';
+        $fluent->file = __FILE__;
+
+        $this->assertTrue(isset($fluent->laravel));
+        $this->assertTrue(isset($fluent->file));
+        $this->assertSame('12.0.0', $fluent->laravel);
+        $this->assertSame(__FILE__, $fluent->file);
+
+        unset($fluent->file);
+
+        $this->assertTrue(isset($fluent->laravel));
+        $this->assertFalse(isset($fluent->file));
+    }
+
+    public function test_it_can_utilise_fluent_as_array()
+    {
+        [$fluent] = $this->newFluent();
+
+        $this->assertFalse(isset($fluent['laravel']));
+        $this->assertFalse(isset($fluent['file']));
+        $this->assertNull($fluent['laravel']);
+        $this->assertNull($fluent['file']);
+
+        $fluent['laravel'] = '12.0.0';
+        $fluent['file'] = __FILE__;
+
+        $this->assertTrue(isset($fluent['laravel']));
+        $this->assertTrue(isset($fluent['file']));
+        $this->assertSame('12.0.0', $fluent['laravel']);
+        $this->assertSame(__FILE__, $fluent['file']);
+
+        unset($fluent['file']);
+
+        $this->assertTrue(isset($fluent['laravel']));
+        $this->assertFalse(isset($fluent['file']));
+    }
+
+    public function test_it_can_set_fluent_attribute_using_method_call()
+    {
+        [$fluent] = $this->newFluent();
+
+        $this->assertFalse(isset($fluent['laravel']));
+        $this->assertNull($fluent['laravel']);
+
+        $this->assertInstanceOf(FluentDecorator::class, $fluent->laravel('12.0.0'));
+
+        $this->assertTrue(isset($fluent['laravel']));
+        $this->assertSame('12.0.0', $fluent['laravel']);
+    }
+
+    /**
+     * Create new test stubs.
+     *
+     * @return array{0: \Orchestra\Testbench\Support\FluentDecorator, 1: array<array-key, mixed>}
+     */
+    private function newFluent(): array
+    {
+        $attributes = ['testbench' => true, 'class' => __CLASS__];
+
+        return [
+            new class($attributes) extends FluentDecorator
+            {
+                // ...
+            },
+            $attributes,
+        ];
+    }
 }
