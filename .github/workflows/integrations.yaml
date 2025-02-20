@@ -58,4 +58,4 @@ jobs:
 
       - name: Execute tests
         run: |
-          vendor/bin/pest
+          vendor/bin/phpunit
