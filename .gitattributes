@@ -3,6 +3,7 @@
 # Ignore following folder/file.
 /.github export-ignore
 /tests/ export-ignore
+/types/ export-ignore
 /.editorconfig export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore
