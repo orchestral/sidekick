@@ -7,7 +7,8 @@ use PHPUnit\Framework\TestCase;
 
 class UndefinedValueTest extends TestCase
 {
-    public function test_it_can_be_resolved() {
+    public function test_it_can_be_resolved()
+    {
         $stub = new UndefinedValue;
 
         $this->assertInstanceOf(UndefinedValue::class, $stub);
@@ -17,7 +18,8 @@ class UndefinedValueTest extends TestCase
         $this->assertFalse(UndefinedValue::equalsTo(''));
     }
 
-    public function test_it_can_be_serialized() {
+    public function test_it_can_be_serialized()
+    {
         $stub = new UndefinedValue;
 
         $this->assertNull($stub->jsonSerialize());

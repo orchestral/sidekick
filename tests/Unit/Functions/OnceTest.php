@@ -4,6 +4,7 @@ namespace Orchestra\Sidekick\Tests\Unit\Functions;
 
 use Illuminate\Container\Container;
 use PHPUnit\Framework\TestCase;
+
 use function Orchestra\Sidekick\once;
 
 class OnceTest extends TestCase
@@ -31,7 +32,8 @@ class OnceTest extends TestCase
     /**
      * @dataProvider onceDataProvider
      */
-    public function test_it_can_cache_the_result($value) {
+    public function test_it_can_cache_the_result($value)
+    {
         $counter = 0;
 
         $response = once(function () use ($value, &$counter) {
@@ -57,7 +59,8 @@ class OnceTest extends TestCase
         yield [['foo' => 'bar']];
     }
 
-    public function test_it_can_cache_object() {
+    public function test_it_can_cache_object()
+    {
         $stub = once(function () {
             $this->app->instance(__CLASS__.'.once', time());
         });

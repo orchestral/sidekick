@@ -3,6 +3,7 @@
 namespace Orchestra\Sidekick\Tests\Unit\Functions;
 
 use PHPUnit\Framework\TestCase;
+
 use function Orchestra\Sidekick\transform_relative_path;
 
 class TransformRelativePathTest extends TestCase
