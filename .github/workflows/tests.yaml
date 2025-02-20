@@ -48,9 +48,12 @@ jobs:
       - name: Installed dependencies
         run: composer show -D
 
-      - name: Execute tests
+      - name: Update PHPUnit Configuration
         run: |
           vendor/bin/phpunit --migrate-configuration
+
+      - name: Execute tests
+        run: |
           vendor/bin/phpunit
 
   tests-on-phpunit10:
@@ -91,9 +94,12 @@ jobs:
       - name: Installed dependencies
         run: composer show -D
 
-      - name: Execute tests
+      - name: Update PHPUnit Configuration
         run: |
           vendor/bin/phpunit --migrate-configuration
+
+      - name: Execute tests
+        run: |
           vendor/bin/phpunit
 
   tests-on-phpunit9:

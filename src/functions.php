@@ -89,8 +89,6 @@ function laravel_version_compare(string $version, ?string $operator = null): int
 
     /**
      * @var string $laravel
-     *
-     * @phpstan-ignore argument.templateType
      */
     $laravel = transform(
         Application::VERSION,
