@@ -61,7 +61,7 @@ jobs:
 
       - name: Execute tests
         run: |
-          vendor/bin/pest
+          vendor/bin/phpunit
 
   phpunit-tests:
     runs-on: "ubuntu-latest"
