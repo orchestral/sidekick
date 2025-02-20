@@ -5,6 +5,7 @@ namespace Orchestra\Sidekick\Tests\Unit\Functions;
 use Illuminate\Container\Container;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+
 use function Orchestra\Sidekick\once;
 
 class OnceTest extends TestCase
