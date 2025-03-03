@@ -188,7 +188,7 @@ function php_binary(): string
  *
  * @codeCoverageIgnore
  */
-function windows_os(): string
+function windows_os(): bool
 {
     return PHP_OS_FAMILY === 'Windows';
 }
