@@ -49,6 +49,25 @@ function join_paths(?string $basePath, string ...$paths): string
 }
 
 /**
+ * Determine if path is symlink for both Unix and Windows environment.
+ *
+ * @api
+ *
+ * @param  string  $path
+ * @return bool
+ */
+function is_link(string $path): bool
+{
+    if (windows_os() && is_dir($path) && readlink($path) !== $path) {
+        return true;
+    } elseif (is_link($path)) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * Transform relative path.
  *
  * @api
@@ -158,4 +177,18 @@ function phpunit_version_compare(string $version, ?string $operator = null): int
 function php_binary(): string
 {
     return (new PhpExecutableFinder)->find(false) ?: 'php';
+}
+
+/**
+ * Determine whether the current environment is Windows based.
+ *
+ * @api
+ *
+ * @return bool
+ *
+ * @codeCoverageIgnore
+ */
+function windows_os(): string
+{
+    return PHP_OS_FAMILY === 'Windows';
 }
