@@ -11,7 +11,7 @@ on:
 jobs:
   laravel-tests:
     runs-on: "ubuntu-latest"
-    continue-on-error: ${{ matrix.experimental }}
+    continue-on-error: false
     strategy:
       matrix:
         dependencies:
@@ -23,8 +23,6 @@ jobs:
           - 11
           - 10
           - 9
-        experimental:
-          - false
         include:
           - laravel: 13
             phpunit: '^12.0'
@@ -84,7 +82,7 @@ jobs:
 
   phpunit-tests:
     runs-on: "ubuntu-latest"
-    continue-on-error: ${{ matrix.experimental }}
+    continue-on-error: false
     strategy:
       matrix:
         dependencies:
@@ -95,8 +93,6 @@ jobs:
           - '^11.0'
           - '^10.0'
           - '^9.6'
-        experimental:
-          - false
         include:
           - phpunit: '^12.0'
             php: 8.3
