@@ -7,8 +7,6 @@ use Illuminate\Foundation\Application;
 use PHPUnit\Runner\Version;
 use RuntimeException;
 
-use function is_link as php_is_link;
-
 /**
  * Run callback only once.
  *
@@ -58,11 +56,11 @@ function join_paths(?string $basePath, string ...$paths): string
  * @param  string  $path
  * @return bool
  */
-function is_link(string $path): bool
+function is_symlink(string $path): bool
 {
     if (windows_os() && is_dir($path) && readlink($path) !== $path) {
         return true;
-    } elseif (php_is_link($path)) {
+    } elseif (is_link($path)) {
         return true;
     }
 
