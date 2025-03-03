@@ -7,7 +7,7 @@ use Illuminate\Foundation\Application;
 use PHPUnit\Runner\Version;
 use RuntimeException;
 
-use function is_link as unix_is_link;
+use function is_link as php_is_link;
 
 /**
  * Run callback only once.
@@ -62,7 +62,7 @@ function is_link(string $path): bool
 {
     if (windows_os() && is_dir($path) && readlink($path) !== $path) {
         return true;
-    } elseif (unix_is_link($path)) {
+    } elseif (php_is_link($path)) {
         return true;
     }
 
