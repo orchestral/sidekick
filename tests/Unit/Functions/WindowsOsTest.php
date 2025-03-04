@@ -4,8 +4,8 @@ namespace Orchestra\Sidekick\Tests\Unit\Functions;
 
 use PHPUnit\Framework\TestCase;
 
-use function windows_os as laravel_windows_os;
 use function Orchestra\Sidekick\windows_os;
+use function windows_os as laravel_windows_os;
 
 class WindowsOsTest extends TestCase
 {
