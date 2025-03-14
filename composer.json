@@ -28,7 +28,7 @@
         "symfony/polyfill-php83": "^1.31"
     },
     "require-dev": {
-        "laravel/framework": "^9.52.16|^10.48.28|^11.42.1|^12.0|^13.0",
+        "laravel/framework": "^9.52.16|^10.48.29|^11.44.1|^12.1.1|^13.0",
         "laravel/pint": "^1.4",
         "phpunit/phpunit": "^9.6|^10.0|^11.0|^12.0",
         "phpstan/phpstan": "^2.1",
