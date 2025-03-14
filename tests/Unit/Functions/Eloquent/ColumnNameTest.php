@@ -18,7 +18,7 @@ class ColumnNameTest extends TestCase
 
     public function test_it_can_translate_column_name_when_given_an_instance_of_eloquent()
     {
-        $column = column_name(new User(), 'email');
+        $column = column_name(new User, 'email');
 
         $this->assertSame('users.email', $column);
     }
@@ -28,7 +28,7 @@ class ColumnNameTest extends TestCase
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Given $model is not an instance of [Illuminate\Database\Eloquent\Model].');
 
-        $column = column_name(new class()
+        $column = column_name(new class
         {
             //
         }, 'email');

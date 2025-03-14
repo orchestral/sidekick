@@ -11,7 +11,7 @@ class ModelExistsTest extends TestCase
 {
     public function test_it_can_detect_existing_model()
     {
-        $user = new User();
+        $user = new User;
         $user->exists = true;
 
         $this->assertTrue(model_exists($user));
@@ -19,7 +19,7 @@ class ModelExistsTest extends TestCase
 
     public function test_it_can_detect_none_existing_model()
     {
-        $user = new User();
+        $user = new User;
 
         $this->assertFalse(model_exists($user));
     }

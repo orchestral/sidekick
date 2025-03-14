@@ -18,7 +18,7 @@ class TableNameTest extends TestCase
 
     public function test_it_can_translate_table_name_when_given_an_instance_of_eloquent()
     {
-        $table = table_name(new User());
+        $table = table_name(new User);
 
         $this->assertSame('users', $table);
     }
@@ -28,7 +28,7 @@ class TableNameTest extends TestCase
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Given $model is not an instance of [Illuminate\Database\Eloquent\Model].');
 
-        $table = table_name(new class()
+        $table = table_name(new class
         {
             //
         });

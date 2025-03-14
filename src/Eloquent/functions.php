@@ -5,7 +5,7 @@ namespace Orchestra\Sidekick\Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 
-if (! function_exists('Orchestra\Sidekick\Eloquent\column_name')) {
+if (! \function_exists('Orchestra\Sidekick\Eloquent\column_name')) {
     /**
      * Get qualify column name from Eloquent model.
      *
@@ -16,18 +16,18 @@ if (! function_exists('Orchestra\Sidekick\Eloquent\column_name')) {
     function column_name($model, string $attribute): string
     {
         if (\is_string($model)) {
-            $model = new $model();
+            $model = new $model;
         }
 
         if (! $model instanceof Model) {
-            throw new InvalidArgumentException(sprintf('Given $model is not an instance of [%s].', Model::class));
+            throw new InvalidArgumentException(\sprintf('Given $model is not an instance of [%s].', Model::class));
         }
 
         return $model->qualifyColumn($attribute);
     }
 }
 
-if (! function_exists('Orchestra\Sidekick\Eloquent\model_exists')) {
+if (! \function_exists('Orchestra\Sidekick\Eloquent\model_exists')) {
     /**
      * Check whether given $model exists.
      *
@@ -39,7 +39,7 @@ if (! function_exists('Orchestra\Sidekick\Eloquent\model_exists')) {
     }
 }
 
-if (! function_exists('Orchestra\Sidekick\Eloquent\table_name')) {
+if (! \function_exists('Orchestra\Sidekick\Eloquent\table_name')) {
     /**
      * Get table name from Eloquent model.
      *
@@ -50,11 +50,11 @@ if (! function_exists('Orchestra\Sidekick\Eloquent\table_name')) {
     function table_name($model): string
     {
         if (\is_string($model)) {
-            $model = new $model();
+            $model = new $model;
         }
 
         if (! $model instanceof Model) {
-            throw new InvalidArgumentException(sprintf('Given $model is not an instance of [%s].', Model::class));
+            throw new InvalidArgumentException(\sprintf('Given $model is not an instance of [%s].', Model::class));
         }
 
         return $model->getTable();
