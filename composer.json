@@ -15,6 +15,7 @@
         },
         "files": [
             "src/Eloquent/functions.php",
+            "src/Http/functions.php",
             "src/functions.php"
         ]
     },
