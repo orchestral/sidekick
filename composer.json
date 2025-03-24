@@ -1,4 +1,5 @@
 {
+    "$schema": "https://getcomposer.org/schema.json",
     "name": "orchestra/sidekick",
     "description": "Packages Toolkit Utilities and Helpers for Laravel",
     "type": "library",
