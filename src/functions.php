@@ -164,7 +164,7 @@ if (! \function_exists('Orchestra\Sidekick\phpunit_version_compare')) {
         $phpunit = transform(
             Version::id(),
             fn (string $version) => match (true) {
-                str_starts_with($version, '12.1-') => '12.1.0',
+                str_starts_with($version, '12.2-') => '12.2.0',
                 default => $version,
             }
         );
