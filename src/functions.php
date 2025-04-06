@@ -115,9 +115,7 @@ if (! \function_exists('Orchestra\Sidekick\laravel_version_compare')) {
             throw new RuntimeException('Unable to verify Laravel Framework version');
         }
 
-        /**
-         * @var string $laravel
-         */
+        /** @var string $laravel */
         $laravel = transform(
             Application::VERSION,
             fn (string $version) => match ($version) {
