@@ -2,6 +2,8 @@
 
 namespace Orchestra\Sidekick\Eloquent;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 
@@ -36,6 +38,30 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_exists')) {
     function model_exists($model): bool
     {
         return $model instanceof Model && $model->exists === true;
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
+    /**
+     * Check whether given $model key type.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model|mixed  $model
+     */
+    function model_key_type($model): string
+    {
+        if (! $model instanceof Model) {
+            throw new InvalidArgumentException(\sprintf('Given $model is not an instance of [%s].', Model::class));
+        }
+
+        $uses = class_uses_recursive($model);
+
+        if (in_array(HasUlids::class, $uses, true)) {
+            return 'ulid';
+        } elseif (in_array(HasUuids::class, $uses, true)) {
+            return 'uuid';
+        }
+
+        return $model->getKeyType();
     }
 }
 
