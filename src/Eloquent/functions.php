@@ -33,7 +33,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_exists')) {
     /**
      * Check whether given $model exists.
      *
-     * @param  \Illuminate\Database\Eloquent\Model|mixed  $model
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      */
     function model_exists($model): bool
     {
@@ -45,19 +45,23 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
     /**
      * Check whether given $model key type.
      *
-     * @param  \Illuminate\Database\Eloquent\Model|mixed  $model
+     * @param  class-string<\Illuminate\Database\Eloquent\Model>|\Illuminate\Database\Eloquent\Model  $model
      */
     function model_key_type($model): string
     {
+        if (\is_string($model)) {
+            $model = new $model;
+        }
+
         if (! $model instanceof Model) {
             throw new InvalidArgumentException(\sprintf('Given $model is not an instance of [%s].', Model::class));
         }
 
         $uses = class_uses_recursive($model);
 
-        if (in_array(HasUlids::class, $uses, true)) {
+        if (\in_array(HasUlids::class, $uses, true)) {
             return 'ulid';
-        } elseif (in_array(HasUuids::class, $uses, true)) {
+        } elseif (\in_array(HasUuids::class, $uses, true)) {
             return 'uuid';
         }
 
