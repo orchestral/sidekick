@@ -26,4 +26,16 @@ class ModelKeyTypeTest extends TestCase
         yield [User::class, 'int'];
         yield [new DatabaseNotification, 'string'];
     }
+
+
+    public function test_it_cant_detect_key_type_when_not_given_an_instance_of_eloquent()
+    {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Given $model is not an instance of [Illuminate\Database\Eloquent\Model].');
+
+        $table = model_key_type(new class
+        {
+            //
+        });
+    }
 }
