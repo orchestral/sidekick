@@ -22,7 +22,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Orchestra\\Sidekick\\Tests\\": "tests/"
+            "Orchestra\\Sidekick\\Tests\\": "tests/",
+            "App\\": "workbench/app/"
         }
     },
     "require": {
