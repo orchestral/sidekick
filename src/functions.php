@@ -34,6 +34,8 @@ if (! \function_exists('Orchestra\Sidekick\join_paths')) {
     /**
      * Join the given paths together.
      *
+     * @api
+     *
      * @param  string|null  $basePath
      * @param  string  ...$paths
      * @return string
@@ -54,7 +56,7 @@ if (! \function_exists('Orchestra\Sidekick\join_paths')) {
 
 if (! \function_exists('Orchestra\Sidekick\is_symlink')) {
     /**
-     * Determine if path is symlink for both Unix and Windows environment.
+     * Determine if the path is a symlink for both Unix and Windows environments.
      *
      * @api
      *
@@ -193,7 +195,7 @@ if (! \function_exists('Orchestra\Sidekick\php_binary')) {
 
 if (! \function_exists('Orchestra\Sidekick\windows_os')) {
     /**
-     * Determine whether the current environment is Windows based.
+     * Determine whether the current environment is Windows-based.
      *
      * @api
      *
