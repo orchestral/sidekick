@@ -37,7 +37,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\is_pivot_model')) {
      *
      * @param  (\Illuminate\Database\Eloquent\Model&\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot)|\Illuminate\Database\Eloquent\Relations\Pivot  $model
      */
-    function is_pivot_model(Model|Pivot $model)
+    function is_pivot_model(Model|Pivot $model): bool
     {
         if ($model instanceof Pivot) {
             return true;
