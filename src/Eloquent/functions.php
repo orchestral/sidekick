@@ -46,6 +46,8 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
      * Check whether given $model key type.
      *
      * @param  \Illuminate\Database\Eloquent\Model|class-string<\Illuminate\Database\Eloquent\Model>  $model
+     *
+     * @throws \InvalidArgumentException
      */
     function model_key_type(Model|string $model): string
     {
