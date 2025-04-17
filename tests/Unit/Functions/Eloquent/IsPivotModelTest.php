@@ -2,35 +2,49 @@
 
 namespace Orchestra\Sidekick\Tests\Functions\Eloquent;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Fluent;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 use function Orchestra\Sidekick\Eloquent\is_pivot_model;
 
 class IsPivotModelTest extends TestCase
 {
-    public function test_it_can_determine_if_model_is_a_pivot_model()
+    /**
+     * @dataProvider modelDataProvider
+     */
+    #[DataProvider('modelDataProvider')]
+    public function test_it_can_detect_model(Model|string $model, bool $exceptedType)
     {
-        $this->assertTrue(is_pivot_model(new class extends \Illuminate\Database\Eloquent\Relations\Pivot
-        {
-            // ...
-        }));
+        $this->assertSame($exceptedType, is_pivot_model($model));
     }
 
-    public function test_it_can_determine_if_model_is_a_pivot_model_when_using_as_pivot_trait()
+    public static function modelDataProvider()
     {
-        $this->assertTrue(is_pivot_model(new class extends \Illuminate\Database\Eloquent\Model
+        yield [new class extends \Illuminate\Database\Eloquent\Relations\Pivot
+        {
+            // ...
+        }, true];
+
+        yield [new class extends \Illuminate\Database\Eloquent\Model
         {
             use \Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 
             // ...
-        }));
-    }
+        }, true];
 
-    public function test_it_cant_determine_if_model_is_a_pivot_model()
-    {
-        $this->assertFalse(is_pivot_model(new class extends \Illuminate\Database\Eloquent\Model
+        yield [new class extends \Illuminate\Database\Eloquent\Model
         {
             // ...
-        }));
+        }, false];
+    }
+
+    public function test_it_cant_detect_is_pivot_model_when_not_given_an_instance_of_eloquent()
+    {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Given $model is not an instance of [Illuminate\Database\Eloquent\Model|Illuminate\Database\Eloquent\Relations\Pivot].');
+
+        is_pivot_model(Fluent::class);
     }
 }

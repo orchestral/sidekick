@@ -35,10 +35,22 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\is_pivot_model')) {
     /**
      * Determine if the given model is a pivot model.
      *
-     * @param  (\Illuminate\Database\Eloquent\Model&\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot)|\Illuminate\Database\Eloquent\Relations\Pivot  $model
+     * @template TPivotModel of (\Illuminate\Database\Eloquent\Model&\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot)|\Illuminate\Database\Eloquent\Relations\Pivot
+     *
+     * @param  TPivotModel|class-string<TPivotModel>  $model
+     *
+     * @throws \InvalidArgumentException
      */
-    function is_pivot_model(Model|Pivot $model): bool
+    function is_pivot_model(Model|Pivot|string $model): bool
     {
+        if (\is_string($model)) {
+            $model = new $model;
+        }
+
+        if (! $model instanceof Model) {
+            throw new InvalidArgumentException(\sprintf('Given $model is not an instance of [%s|%s].', Model::class, Pivot::class));
+        }
+
         if ($model instanceof Pivot) {
             return true;
         }
