@@ -5,6 +5,7 @@ namespace Orchestra\Sidekick\Tests\Functions\Eloquent;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Fluent;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -32,9 +33,6 @@ class ModelKeyTypeTest extends TestCase
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Given $model is not an instance of [Illuminate\Database\Eloquent\Model].');
 
-        $table = model_key_type(new class
-        {
-            //
-        });
+        $table = model_key_type(Fluent::class);
     }
 }
