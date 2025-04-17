@@ -5,6 +5,8 @@ namespace Orchestra\Sidekick\Eloquent;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use InvalidArgumentException;
 
 if (! \function_exists('Orchestra\Sidekick\Eloquent\column_name')) {
@@ -15,7 +17,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\column_name')) {
      *
      * @throws \InvalidArgumentException
      */
-    function column_name($model, string $attribute): string
+    function column_name(Model|string $model, string $attribute): string
     {
         if (\is_string($model)) {
             $model = new $model;
@@ -29,15 +31,30 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\column_name')) {
     }
 }
 
+if (! \function_exists('Orchestra\Sidekick\Eloquent\is_pivot_model')) {
+    /**
+     * Determine if the given model is a pivot model.
+     * 
+     * @param  (\Illuminate\Database\Eloquent\Model&\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot)|\Illuminate\Database\Eloquent\Relations\Pivot  $model
+     */
+    function is_pivot_model(Model|Pivot $model) {
+        if ($model instanceof Pivot) {
+            return true;
+        }
+
+        return \in_array(AsPivot::class, class_uses_recursive($model), true);
+    }
+}
+
 if (! \function_exists('Orchestra\Sidekick\Eloquent\model_exists')) {
     /**
      * Check whether given $model exists.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
      */
-    function model_exists($model): bool
+    function model_exists(Model $model): bool
     {
-        return $model instanceof Model && $model->exists === true;
+        return $model->exists === true;
     }
 }
 
@@ -47,7 +64,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
      *
      * @param  class-string<\Illuminate\Database\Eloquent\Model>|\Illuminate\Database\Eloquent\Model  $model
      */
-    function model_key_type($model): string
+    function model_key_type(Model|string $model): string
     {
         if (\is_string($model)) {
             $model = new $model;
@@ -77,7 +94,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\table_name')) {
      *
      * @throws \InvalidArgumentException
      */
-    function table_name($model): string
+    function table_name(Model|string $model): string
     {
         if (\is_string($model)) {
             $model = new $model;
