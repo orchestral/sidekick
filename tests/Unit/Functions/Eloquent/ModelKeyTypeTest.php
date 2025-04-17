@@ -4,7 +4,6 @@ namespace Orchestra\Sidekick\Tests\Functions\Eloquent;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Fluent;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -25,7 +24,30 @@ class ModelKeyTypeTest extends TestCase
     public static function modelDataProvider()
     {
         yield [User::class, 'int'];
-        yield [new DatabaseNotification, 'string'];
+
+        yield [new class extends Model
+        {
+            protected $keyType = 'int';
+        }, 'int'];
+
+        yield [new class extends Model
+        {
+            protected $keyType = 'string';
+        }, 'string'];
+
+        yield [new class extends Model
+        {
+            use \Illuminate\Database\Eloquent\Concerns\HasUuids;
+
+            protected $keyType = 'string';
+        }, 'uuid'];
+
+        yield [new class extends Model
+        {
+            use \Illuminate\Database\Eloquent\Concerns\HasUlids;
+
+            protected $keyType = 'string';
+        }, 'ulid'];
     }
 
     public function test_it_cant_detect_key_type_when_not_given_an_instance_of_eloquent()
@@ -33,6 +55,6 @@ class ModelKeyTypeTest extends TestCase
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Given $model is not an instance of [Illuminate\Database\Eloquent\Model].');
 
-        $table = model_key_type(Fluent::class);
+        model_key_type(Fluent::class);
     }
 }
