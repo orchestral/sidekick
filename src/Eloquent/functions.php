@@ -5,6 +5,8 @@ namespace Orchestra\Sidekick\Eloquent;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use InvalidArgumentException;
 
 if (! \function_exists('Orchestra\Sidekick\Eloquent\column_name')) {
@@ -26,6 +28,34 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\column_name')) {
         }
 
         return $model->qualifyColumn($attribute);
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\Eloquent\is_pivot_model')) {
+    /**
+     * Determine if the given model is a pivot model.
+     *
+     * @template TPivotModel of (\Illuminate\Database\Eloquent\Model&\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot)|\Illuminate\Database\Eloquent\Relations\Pivot
+     *
+     * @param  TPivotModel|class-string<TPivotModel>  $model
+     *
+     * @throws \InvalidArgumentException
+     */
+    function is_pivot_model(Model|Pivot|string $model): bool
+    {
+        if (\is_string($model)) {
+            $model = new $model;
+        }
+
+        if (! $model instanceof Model) {
+            throw new InvalidArgumentException(\sprintf('Given $model is not an instance of [%s|%s].', Model::class, Pivot::class));
+        }
+
+        if ($model instanceof Pivot) {
+            return true;
+        }
+
+        return \in_array(AsPivot::class, class_uses_recursive($model), true);
     }
 }
 
