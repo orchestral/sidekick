@@ -47,7 +47,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
      *
      * @param  \Illuminate\Database\Eloquent\Model|class-string<\Illuminate\Database\Eloquent\Model>  $model
      */
-    function model_key_type(string|Model $model): string
+    function model_key_type(Model|string $model): string
     {
         if (\is_string($model)) {
             $model = new $model;
