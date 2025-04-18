@@ -60,28 +60,6 @@ if (! \function_exists('Orchestra\Sidekick\enum_value')) {
     }
 }
 
-if (! \function_exists('Orchestra\Sidekick\once')) {
-    /**
-     * Run callback only once.
-     *
-     * @api
-     *
-     * @return \Closure():mixed
-     */
-    function once($callback): Closure
-    {
-        $response = new UndefinedValue;
-
-        return function () use ($callback, &$response) {
-            if ($response instanceof UndefinedValue) {
-                $response = value($callback) ?? null;
-            }
-
-            return $response;
-        };
-    }
-}
-
 if (! \function_exists('Orchestra\Sidekick\join_paths')) {
     /**
      * Join the given paths together.
@@ -99,6 +77,29 @@ if (! \function_exists('Orchestra\Sidekick\join_paths')) {
         }
 
         return $basePath.implode('', $paths);
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\once')) {
+    /**
+     * Run callback only once.
+     *
+     * @api
+     *
+     * @param  mixed  $callback
+     * @return \Closure():mixed
+     */
+    function once($callback): Closure
+    {
+        $response = new UndefinedValue;
+
+        return function () use ($callback, &$response) {
+            if ($response instanceof UndefinedValue) {
+                $response = value($callback) ?? null;
+            }
+
+            return $response;
+        };
     }
 }
 
