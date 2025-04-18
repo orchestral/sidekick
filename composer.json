@@ -39,10 +39,7 @@
         "symfony/process": "^6.0|^7.0"
     },
     "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        }
+        "sort-packages": true
     },
     "scripts": {
         "lint": [
