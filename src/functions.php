@@ -7,6 +7,26 @@ use Illuminate\Foundation\Application;
 use PHPUnit\Runner\Version;
 use RuntimeException;
 
+if (! \function_exists('Orchestra\Sidekick\join_paths')) {
+    /**
+     * Join the given paths together.
+     *
+     * @api
+     */
+    function join_paths(?string $basePath, string ...$paths): string
+    {
+        foreach ($paths as $index => $path) {
+            if (empty($path) && $path !== '0') {
+                unset($paths[$index]);
+            } else {
+                $paths[$index] = DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR);
+            }
+        }
+
+        return $basePath.implode('', $paths);
+    }
+}
+
 if (! \function_exists('Orchestra\Sidekick\once')) {
     /**
      * Run callback only once.
@@ -27,26 +47,6 @@ if (! \function_exists('Orchestra\Sidekick\once')) {
 
             return $response;
         };
-    }
-}
-
-if (! \function_exists('Orchestra\Sidekick\join_paths')) {
-    /**
-     * Join the given paths together.
-     *
-     * @api
-     */
-    function join_paths(?string $basePath, string ...$paths): string
-    {
-        foreach ($paths as $index => $path) {
-            if (empty($path) && $path !== '0') {
-                unset($paths[$index]);
-            } else {
-                $paths[$index] = DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR);
-            }
-        }
-
-        return $basePath.implode('', $paths);
     }
 }
 
