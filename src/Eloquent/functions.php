@@ -62,8 +62,6 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\is_pivot_model')) {
 if (! \function_exists('Orchestra\Sidekick\Eloquent\model_exists')) {
     /**
      * Check whether given $model exists.
-     *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
      */
     function model_exists(Model $model): bool
     {

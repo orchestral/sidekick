@@ -17,7 +17,6 @@ if (! \function_exists('Orchestra\Sidekick\enum_name')) {
      * @api
      *
      * @param  \BackedEnum|\UnitEnum  $enum
-     * @return string
      *
      * @throws \RuntimeException
      */
@@ -67,7 +66,6 @@ if (! \function_exists('Orchestra\Sidekick\once')) {
      *
      * @api
      *
-     * @param  mixed  $callback
      * @return \Closure():mixed
      */
     function once($callback): Closure
@@ -87,10 +85,6 @@ if (! \function_exists('Orchestra\Sidekick\once')) {
 if (! \function_exists('Orchestra\Sidekick\join_paths')) {
     /**
      * Join the given paths together.
-     *
-     * @param  string|null  $basePath
-     * @param  string  ...$paths
-     * @return string
      */
     function join_paths(?string $basePath, string ...$paths): string
     {
@@ -111,9 +105,6 @@ if (! \function_exists('Orchestra\Sidekick\is_symlink')) {
      * Determine if path is symlink for both Unix and Windows environment.
      *
      * @api
-     *
-     * @param  string  $path
-     * @return bool
      */
     function is_symlink(string $path): bool
     {
@@ -132,10 +123,6 @@ if (! \function_exists('Orchestra\Sidekick\transform_relative_path')) {
      * Transform relative path.
      *
      * @api
-     *
-     * @param  string  $path
-     * @param  string  $workingPath
-     * @return string
      */
     function transform_relative_path(string $path, string $workingPath): string
     {
@@ -152,10 +139,6 @@ if (! \function_exists('Orchestra\Sidekick\laravel_version_compare')) {
      * @api
      *
      * @template TOperator of string|null
-     *
-     * @param  string  $version
-     * @param  string|null  $operator
-     * @return int|bool
      *
      * @phpstan-param  TOperator  $operator
      *
@@ -194,10 +177,6 @@ if (! \function_exists('Orchestra\Sidekick\phpunit_version_compare')) {
      *
      * @template TOperator of string|null
      *
-     * @param  string  $version
-     * @param  string|null  $operator
-     * @return int|bool
-     *
      * @throws \RuntimeException
      *
      * @phpstan-param  TOperator  $operator
@@ -235,8 +214,6 @@ if (! \function_exists('Orchestra\Sidekick\php_binary')) {
      *
      * @api
      *
-     * @return string
-     *
      * @codeCoverageIgnore
      */
     function php_binary(): string
@@ -250,8 +227,6 @@ if (! \function_exists('Orchestra\Sidekick\windows_os')) {
      * Determine whether the current environment is Windows based.
      *
      * @api
-     *
-     * @return bool
      *
      * @codeCoverageIgnore
      */
