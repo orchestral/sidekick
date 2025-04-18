@@ -5,7 +5,6 @@ namespace Orchestra\Sidekick;
 use BackedEnum;
 use Closure;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Str;
 use PHPUnit\Runner\Version;
 use RuntimeException;
 use UnitEnum;
@@ -20,7 +19,7 @@ if (! \function_exists('Orchestra\Sidekick\enum_name')) {
      */
     function enum_name(BackedEnum|UnitEnum $enum): string
     {
-        return Str::title(str_replace('_', ' ', $enum->name));
+        return mb_convert_case(str_replace('_', ' ', $enum->name), MB_CASE_TITLE, 'UTF-8');
     }
 }
 
