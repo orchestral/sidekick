@@ -2,10 +2,54 @@
 
 namespace Orchestra\Sidekick;
 
+use BackedEnum;
 use Closure;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Str;
 use PHPUnit\Runner\Version;
 use RuntimeException;
+use UnitEnum;
+
+if (PHP_VERSION_ID >= 80100) {
+    if (! \function_exists('Orchestra\Sidekick\enum_name')) {
+        /**
+         * Get the proper name from enum.
+         *
+         * @api
+         *
+         * @param  \BackedEnum|\UnitEnum  $enum
+         * @return string
+         */
+        function enum_name(BackedEnum|UnitEnum $enum): string
+        {
+            return Str::title(str_replace('_', ' ', $enum->name));
+        }
+    }
+
+    if (! \function_exists('Orchestra\Sidekick\enum_value')) {
+        /**
+         * Get the proper name from enum.
+         *
+         * @api
+         *
+         * @template TValue
+         * @template TDefault
+         *
+         * @param  TValue  $value
+         * @param  TDefault|callable(TValue): TDefault  $default
+         * @return ($value is empty ? TDefault : mixed)
+         */
+        function enum_value(mixed $value, mixed $default = null): mixed
+        {
+            return match (true) {
+                $value instanceof BackedEnum => $value->value,
+                $value instanceof UnitEnum => $value->name,
+
+                default => $value ?? value($default),
+            };
+        }
+    }
+}
 
 if (! \function_exists('Orchestra\Sidekick\once')) {
     /**
