@@ -94,10 +94,6 @@ jobs:
       - name: Installed dependencies
         run: composer show -D
 
-      - name: Update PHPUnit Configuration
-        run: |
-          vendor/bin/phpunit --migrate-configuration
-
       - name: Execute tests
         run: |
           vendor/bin/phpunit
