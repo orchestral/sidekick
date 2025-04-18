@@ -1,21 +1,15 @@
 <?php
 
-namespace Orchestra\Sidekick\Tests\Php81\Functions;
+namespace Orchestra\Sidekick\Tests\Unit\Functions;
 
+use App\Enums\TestBackedEnum;
+use App\Enums\TestEnum;
+use App\Enums\TestStringBackedEnum;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\RequiresPhp;
 use PHPUnit\Framework\TestCase;
 
 use function Orchestra\Sidekick\enum_name;
 
-if (PHP_VERSION_ID >= 80100) {
-    include_once 'Enums.php';
-}
-
-/**
- * @requires PHP >= 8.1.0
- */
-#[RequiresPhp('>= 8.1.0')]
 class EnumNameTest extends TestCase
 {
     /**
