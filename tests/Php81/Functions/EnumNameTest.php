@@ -4,9 +4,10 @@ namespace Orchestra\Sidekick\Tests\Php81\Functions;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+
 use function Orchestra\Sidekick\enum_name;
 
-include_once "Enums.php";
+include_once 'Enums.php';
 
 class EnumNameTest extends TestCase
 {
