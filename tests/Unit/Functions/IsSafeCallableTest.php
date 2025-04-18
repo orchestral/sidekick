@@ -2,6 +2,7 @@
 
 namespace Orchestra\Sidekick\Tests\Unit\Functions;
 
+use Illuminate\Support\Fluent;
 use Orchestra\Sidekick\FluentDecorator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -25,6 +26,7 @@ class IsSafeCallableTest extends TestCase
         yield ['trim', false];
         yield ['app', false];
         yield [[__CLASS__, 'callableDataProvider'], true];
+        yield [[Fluent::class, 'toArray'], false];
         yield [[FluentDecorator::class, 'toArray'], false];
     }
 }
