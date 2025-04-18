@@ -3,12 +3,17 @@
 namespace Orchestra\Sidekick\Tests\Php81\Functions;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RequiresPhp;
 use PHPUnit\Framework\TestCase;
 
 use function Orchestra\Sidekick\enum_value;
 
 include_once 'Enums.php';
 
+/**
+ * @requires PHP >=8.1.0
+ */
+#[RequiresPhp('>=8.1.0')]
 class EnumValueTest extends TestCase
 {
     /**

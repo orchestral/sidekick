@@ -24,7 +24,7 @@ if (! \function_exists('Orchestra\Sidekick\enum_name')) {
     function enum_name($enum): string
     {
         if (PHP_VERSION_ID < 80100) {
-            throw new RuntimeException(sprintf('%s requires PHP 8.1 and above', __FUNCTION__));
+            throw new RuntimeException(\sprintf('%s requires PHP 8.1 and above', __FUNCTION__));
         }
 
         return Str::title(str_replace('_', ' ', $enum->name));
@@ -47,7 +47,7 @@ if (! \function_exists('Orchestra\Sidekick\enum_value')) {
     function enum_value(mixed $value, mixed $default = null): mixed
     {
         if (PHP_VERSION_ID < 80100) {
-            throw new RuntimeException(sprintf('%s requires PHP 8.1 and above', __FUNCTION__));
+            throw new RuntimeException(\sprintf('%s requires PHP 8.1 and above', __FUNCTION__));
         }
 
         return match (true) {
