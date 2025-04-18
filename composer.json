@@ -27,7 +27,7 @@
         }
     },
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "composer-runtime-api": "^2.2",
         "symfony/polyfill-php83": "^1.31"
     },
@@ -36,14 +36,10 @@
         "laravel/pint": "^1.4",
         "phpstan/phpstan": "^2.1.12",
         "phpunit/phpunit": "^9.6|^10.0|^11.0|^12.0",
-        "spatie/laravel-ray": "^1.40.2",
         "symfony/process": "^6.0|^7.0"
     },
     "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        }
+        "sort-packages": true
     },
     "scripts": {
         "lint": [

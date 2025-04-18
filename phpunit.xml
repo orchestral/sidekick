@@ -8,10 +8,6 @@
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
-
-        <testsuite name="PHP81">
-            <directory phpVersion="8.1.0" phpVersionOperator=">=" suffix="Test.php">tests/Php81</directory>
-        </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">
         <include>
