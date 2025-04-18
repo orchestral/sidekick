@@ -11,9 +11,9 @@ use function Orchestra\Sidekick\enum_name;
 include_once 'Enums.php';
 
 /**
- * @requires PHP >=8.1.0
+ * @requires PHP >= 8.1.0
  */
-#[RequiresPhp('>=8.1.0')]
+#[RequiresPhp('>= 8.1.0')]
 class EnumNameTest extends TestCase
 {
     /**
