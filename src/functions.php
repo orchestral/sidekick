@@ -13,6 +13,7 @@ if (! \function_exists('Orchestra\Sidekick\once')) {
      *
      * @api
      *
+     * @param  mixed  $callback
      * @return \Closure():mixed
      */
     function once($callback): Closure
