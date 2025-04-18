@@ -8,6 +8,8 @@ if (! \function_exists('Orchestra\Sidekick\safe_int')) {
      *
      * https://stackoverflow.com/questions/47188449/json-max-int-number/47188576
      *
+     * @api
+     *
      * @return int|string
      */
     function safe_int($value)
