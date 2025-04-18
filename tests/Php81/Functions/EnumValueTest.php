@@ -8,7 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 use function Orchestra\Sidekick\enum_value;
 
-include_once 'Enums.php';
+if (PHP_VERSION_ID >= 80100) {
+    include_once 'Enums.php';
+}
 
 /**
  * @requires PHP >= 8.1.0
