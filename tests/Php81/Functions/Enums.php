@@ -2,6 +2,10 @@
 
 namespace Orchestra\Sidekick\Tests\Php81\Functions;
 
+if (PHP_VERSION_ID < 80100) {
+    return;
+}
+
 enum TestEnum
 {
     case A;
