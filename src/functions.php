@@ -5,6 +5,7 @@ namespace Orchestra\Sidekick;
 use BackedEnum;
 use Closure;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use PHPUnit\Runner\Version;
 use RuntimeException;
@@ -103,6 +104,31 @@ if (! \function_exists('Orchestra\Sidekick\join_paths')) {
         }
 
         return $basePath.implode('', $paths);
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\is_safe_callable')) {
+    /**
+     * Determine if the value is a callable and not a string matching an available function name.
+     *
+     * @param  mixed  $value
+     * @return bool
+     */
+    function is_safe_callable(mixed $value): bool
+    {
+        if ($value instanceof Closure) {
+            return true;
+        }
+
+        if (! \is_callable($value)) {
+            return false;
+        }
+
+        if (\is_array($value)) {
+            return \count($value) === 2 && ! Arr::isAssoc($value) && method_exists(...$value);
+        }
+
+        return ! \is_string($value);
     }
 }
 
