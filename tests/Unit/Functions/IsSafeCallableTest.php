@@ -5,6 +5,7 @@ namespace Orchestra\Sidekick\Tests\Unit\Functions;
 use Orchestra\Sidekick\FluentDecorator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+
 use function Orchestra\Sidekick\is_safe_callable;
 
 class IsSafeCallableTest extends TestCase

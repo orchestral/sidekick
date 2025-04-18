@@ -13,6 +13,8 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\column_name')) {
     /**
      * Get qualify column name from Eloquent model.
      *
+     * @api
+     *
      * @param  \Illuminate\Database\Eloquent\Model|class-string<\Illuminate\Database\Eloquent\Model>  $model
      *
      * @throws \InvalidArgumentException
@@ -63,7 +65,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_exists')) {
     /**
      * Check whether given $model exists.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @api
      */
     function model_exists(Model $model): bool
     {
@@ -74,6 +76,8 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_exists')) {
 if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
     /**
      * Check whether given $model key type.
+     *
+     * @api
      *
      * @param  \Illuminate\Database\Eloquent\Model|class-string<\Illuminate\Database\Eloquent\Model>  $model
      *
@@ -104,6 +108,8 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
 if (! \function_exists('Orchestra\Sidekick\Eloquent\table_name')) {
     /**
      * Get table name from Eloquent model.
+     *
+     * @api
      *
      * @param  \Illuminate\Database\Eloquent\Model|class-string<\Illuminate\Database\Eloquent\Model>  $model
      *
