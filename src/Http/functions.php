@@ -10,9 +10,9 @@ if (! \function_exists('Orchestra\Sidekick\safe_int')) {
      *
      * @api
      *
-     * @return int|string
+     * @param  mixed  $value
      */
-    function safe_int($value)
+    function safe_int($value): int|string
     {
         $jsonMaxInt = 9007199254740991;
 
