@@ -87,7 +87,6 @@ jobs:
           dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "--prefer-dist --no-cache --with=phpunit/phpunit:^10.0"
 
-
       - name: Update PHPUnit Configuration
         run: |
           vendor/bin/phpunit --migrate-configuration
