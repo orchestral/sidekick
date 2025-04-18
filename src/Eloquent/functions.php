@@ -11,7 +11,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\column_name')) {
      *
      * @api
      *
-     * @param  class-string<\Illuminate\Database\Eloquent\Model>|\Illuminate\Database\Eloquent\Model  $model
+     * @param  \Illuminate\Database\Eloquent\Model|class-string<\Illuminate\Database\Eloquent\Model>  $model
      *
      * @throws \InvalidArgumentException
      */
@@ -49,7 +49,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\table_name')) {
      *
      * @api
      *
-     * @param  class-string<\Illuminate\Database\Eloquent\Model>|\Illuminate\Database\Eloquent\Model  $model
+     * @param  \Illuminate\Database\Eloquent\Model|class-string<\Illuminate\Database\Eloquent\Model>  $model
      *
      * @throws \InvalidArgumentException
      */
