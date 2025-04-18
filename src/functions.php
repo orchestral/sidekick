@@ -43,6 +43,8 @@ if (! \function_exists('Orchestra\Sidekick\enum_value')) {
      * @param  TValue  $value
      * @param  TDefault|callable(TValue): TDefault  $default
      * @return ($value is empty ? TDefault : mixed)
+     *
+     * @throws \RuntimeException
      */
     function enum_value(mixed $value, mixed $default = null): mixed
     {
