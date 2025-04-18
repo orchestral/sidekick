@@ -67,9 +67,9 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_exists')) {
      *
      * @api
      */
-    function model_exists(Model $model): bool
+    function model_exists(mixed $model): bool
     {
-        return $model->exists === true;
+        return $model instanceof Model && $model->exists === true;
     }
 }
 
