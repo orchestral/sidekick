@@ -66,7 +66,7 @@ if (! \function_exists('Orchestra\Sidekick\is_safe_callable')) {
         }
 
         if (\is_array($value)) {
-            $isList = function_exists('array_is_list')
+            $isList = \function_exists('array_is_list')
                 ? array_is_list($value)
                 : ! Arr::isAssoc($value);
 
