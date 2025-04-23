@@ -2,7 +2,7 @@
 
 namespace Orchestra\Sidekick\Tests\Functions\Eloquent;
 
-use Illuminate\Foundation\Auth\User;
+use App\Models\User;
 use PHPUnit\Framework\TestCase;
 
 use function Orchestra\Sidekick\Eloquent\model_exists;

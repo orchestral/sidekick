@@ -2,7 +2,8 @@
 
 namespace Orchestra\Sidekick\Tests\Functions\Eloquent;
 
-use Illuminate\Foundation\Auth\User;
+use App\Models\User;
+use Illuminate\Support\Fluent;
 use PHPUnit\Framework\TestCase;
 
 use function Orchestra\Sidekick\Eloquent\column_name;
@@ -28,9 +29,6 @@ class ColumnNameTest extends TestCase
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Given $model is not an instance of [Illuminate\Database\Eloquent\Model].');
 
-        $column = column_name(new class
-        {
-            //
-        }, 'email');
+        $column = column_name(Fluent::class, 'email');
     }
 }
