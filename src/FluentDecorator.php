@@ -132,6 +132,7 @@ abstract class FluentDecorator implements Arrayable, ArrayAccess, Jsonable, Json
      */
     public function __get($key)
     {
+        /** @phpstan-ignore function.alreadyNarrowedType */
         if (method_exists($this->fluent, 'value')) {
             return $this->fluent->value($key);
         }
