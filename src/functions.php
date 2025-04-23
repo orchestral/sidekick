@@ -4,6 +4,7 @@ namespace Orchestra\Sidekick;
 
 use Closure;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Arr;
 use PHPUnit\Runner\Version;
 use RuntimeException;
 
@@ -47,6 +48,32 @@ if (! \function_exists('Orchestra\Sidekick\once')) {
 
             return $response;
         };
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\is_safe_callable')) {
+    /**
+     * Determine if the value is a callable and not a string matching an available function name.
+     */
+    function is_safe_callable(mixed $value): bool
+    {
+        if ($value instanceof Closure) {
+            return true;
+        }
+
+        if (! \is_callable($value)) {
+            return false;
+        }
+
+        if (\is_array($value)) {
+            $isList = function_exists('array_is_list')
+                ? array_is_list($value)
+                : ! Arr::isAssoc($value);
+
+            return \count($value) === 2 && $isList && method_exists(...$value);
+        }
+
+        return ! \is_string($value);
     }
 }
 
