@@ -125,7 +125,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\normalize_value')) {
         } elseif (\is_object($value) || \is_array($value)) {
             try {
                 return json_encode($value);
-            } catch (Throwable $e) {
+            } catch (Throwable $e) { // @phpstan-ignore catch.neverThrown
                 return $value;
             }
         }

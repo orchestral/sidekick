@@ -5,8 +5,9 @@ namespace Orchestra\Sidekick\Tests\Functions\Eloquent;
 use Illuminate\Support\Fluent;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use function Orchestra\Sidekick\Eloquent\normalize_value;
 use stdClass;
+
+use function Orchestra\Sidekick\Eloquent\normalize_value;
 
 class NormalizeValueTest extends TestCase
 {
