@@ -34,15 +34,12 @@
     "require-dev": {
         "laravel/framework": "^9.52.16|^10.48.29|^11.44.1|^12.1.1|^13.0",
         "laravel/pint": "^1.4",
+        "phpstan/phpstan": "^2.1.12",
         "phpunit/phpunit": "^9.6|^10.0|^11.0|^12.0",
-        "phpstan/phpstan": "^2.1",
         "symfony/process": "^6.0|^7.0"
     },
     "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        }
+        "sort-packages": true
     },
     "scripts": {
         "lint": [
