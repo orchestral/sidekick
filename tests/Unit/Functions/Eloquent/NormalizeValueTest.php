@@ -23,7 +23,7 @@ class NormalizeValueTest extends TestCase
      * @dataProvider valuesDataProvider
      */
     #[DataProvider('valuesDataProvider')]
-    public function test_it_can_hydrate_given_values(mixed $given, mixed $expected)
+    public function test_it_can_normalize_given_values(mixed $given, mixed $expected)
     {
         $this->assertSame($expected, normalize_value($given));
     }
