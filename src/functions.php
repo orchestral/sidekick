@@ -54,6 +54,8 @@ if (! \function_exists('Orchestra\Sidekick\once')) {
 if (! \function_exists('Orchestra\Sidekick\is_safe_callable')) {
     /**
      * Determine if the value is a callable and not a string matching an available function name.
+     *
+     * @api
      */
     function is_safe_callable(mixed $value): bool
     {
