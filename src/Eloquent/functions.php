@@ -2,12 +2,15 @@
 
 namespace Orchestra\Sidekick\Eloquent;
 
+use BackedEnum;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use InvalidArgumentException;
+use Stringable;
+use Throwable;
 
 if (! \function_exists('Orchestra\Sidekick\Eloquent\column_name')) {
     /**
@@ -104,6 +107,30 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
         }
 
         return $model->getKeyType();
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\Eloquent\normalize_value')) {
+    /**
+     * Normalize the given value to be store to database as scalar.
+     *
+     * @return scalar
+     */
+    function normalize_value(mixed $value): mixed
+    {
+        if ($value instanceof BackedEnum) {
+            return $value->value;
+        } elseif (\is_object($value) && $value instanceof Stringable) {
+            return (string) $value;
+        } elseif (\is_object($value) || \is_array($value)) {
+            try {
+                return json_encode($value);
+            } catch (Throwable $e) {
+                return $value;
+            }
+        }
+
+        return $value;
     }
 }
 
