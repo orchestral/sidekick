@@ -11,7 +11,7 @@ use function Orchestra\Sidekick\Eloquent\normalize_value;
 
 class NormalizeValueTest extends TestCase
 {
-    public function test_it_can_resolve_a_stdclass_object()
+    public function test_it_can_normalize_stdclass_object()
     {
         $value = new stdClass;
         $value->framework = 'laravel';
