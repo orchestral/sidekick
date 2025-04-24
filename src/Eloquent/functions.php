@@ -40,6 +40,8 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\is_pivot_model')) {
     /**
      * Determine if the given model is a pivot model.
      *
+     * @api
+     *
      * @template TPivotModel of (\Illuminate\Database\Eloquent\Model&\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot)|\Illuminate\Database\Eloquent\Relations\Pivot
      *
      * @param  TPivotModel|class-string<TPivotModel>  $model
@@ -113,6 +115,8 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
 if (! \function_exists('Orchestra\Sidekick\Eloquent\normalize_value')) {
     /**
      * Normalize the given value to be store to database as scalar.
+     *
+     * @api
      *
      * @return scalar
      */
