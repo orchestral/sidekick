@@ -1,6 +1,5 @@
 name: integration tests
 
-
 on:
   push:
     branches:
