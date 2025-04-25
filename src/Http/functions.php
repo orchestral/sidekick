@@ -9,19 +9,17 @@ if (! \function_exists('Orchestra\Sidekick\Http\safe_int')) {
      * https://stackoverflow.com/questions/47188449/json-max-int-number/47188576
      *
      * @api
-     *
-     * @param  mixed  $value
      */
-    function safe_int($value): int|string
+    function safe_int(mixed $value): mixed
     {
         $jsonMaxInt = 9007199254740991;
 
-        if (\is_int($value) && abs($value) < $jsonMaxInt) {
-            return $value;
+        if (\is_int($value) && abs($value) >= $jsonMaxInt) {
+            return (string) $value;
         } elseif (filter_var($value, FILTER_VALIDATE_INT) && abs($value) < $jsonMaxInt) {
             return (int) $value;
         }
 
-        return (string) $value;
+        return $value;
     }
 }
