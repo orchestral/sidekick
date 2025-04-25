@@ -23,6 +23,7 @@ class SafeIntTest extends TestCase
         yield [null, null];
         yield [1, 1];
         yield ['foo', 'foo'];
+        yield [9_007_199, 9007199];
         yield [9007199254740990, 9007199254740990];
         yield ['9007199254740990', 9007199254740990];
         yield [-9007199254740990, -9007199254740990];
