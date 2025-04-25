@@ -2,7 +2,7 @@
 
 namespace Orchestra\Sidekick\Http;
 
-if (! \function_exists('Orchestra\Sidekick\safe_int')) {
+if (! \function_exists('Orchestra\Sidekick\Http\safe_int')) {
     /**
      * Convert large id higher than Number.MAX_SAFE_INTEGER to string.
      *
