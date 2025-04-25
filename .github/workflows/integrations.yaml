@@ -116,15 +116,11 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, intl, fileinfo
           coverage: none
 
-      - name: Install PHPUnit
-        run: |
-          composer require --dev "phpunit/phpunit:${{ matrix.phpunit }}" --no-install
-
       - name: Install dependencies
         uses: "ramsey/composer-install@v3"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--prefer-dist --no-cache"
+          composer-options: "--prefer-dist --no-cache --with=phpunit/phpunit:${{ matrix.phpunit }}"
 
       - name: Installed dependencies
         run: composer show -D
