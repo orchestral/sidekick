@@ -90,7 +90,7 @@ jobs:
       - name: Update PHPUnit Configuration
         run: |
           vendor/bin/phpunit --migrate-configuration
-        if: matrix.dependencies == 'lowest' && matrix.phpunit == '^10.0'
+        if: matrix.dependencies == 'lowest'
 
       - name: Installed dependencies
         run: composer show -D
