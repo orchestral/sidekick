@@ -64,7 +64,6 @@ jobs:
           - 8.1
         dependencies:
           - "highest"
-          - "lowest"
         experimental:
           - false
 
@@ -90,7 +89,6 @@ jobs:
       - name: Update PHPUnit Configuration
         run: |
           vendor/bin/phpunit --migrate-configuration
-        if: matrix.dependencies == 'lowest'
 
       - name: Installed dependencies
         run: composer show -D
