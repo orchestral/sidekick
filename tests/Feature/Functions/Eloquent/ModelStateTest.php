@@ -43,6 +43,27 @@ class ModelStateTest extends TestCase
         $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
     }
 
+    public function test_it_can_detect_changes_on_recently_created_model()
+    {
+        $user = (new User)->forceFill([
+            'name' => 'Mior Muhammad Zaki',
+            'email' => 'crynobone@gmail.com',
+            'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
+        ]);
+
+        $user->syncOriginal();
+        $user->exists = true;
+        $user->wasRecentlyCreated = true;
+
+        [$original, $changes] = model_state($user);
+
+        $this->assertNull($original);
+        $this->assertSame(['name', 'email', 'password'], array_keys($changes));
+        $this->assertSame('Mior Muhammad Zaki', $changes['name']);
+        $this->assertSame('crynobone@gmail.com', $changes['email']);
+        $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
+    }
+
     public function test_it_can_detect_changes_on_updating_a_model()
     {
         $user = (new User([
