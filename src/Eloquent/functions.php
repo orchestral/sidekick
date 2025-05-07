@@ -141,7 +141,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
                 )->all();
         };
 
-        if (! model_exists($model)) {
+        if (! model_exists($model) || $model->wasRecentlyCreated == true) {
             $original = null;
             $changes = $sanitizeValues($copy->attributesToArray());
 
