@@ -4,7 +4,6 @@ namespace Orchestra\Sidekick\Tests\Concerns;
 
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Schema\Builder as SchemaBuilder;
 
 trait InteractsWithDatabase
 {
@@ -31,7 +30,10 @@ trait InteractsWithDatabase
     /**
      * Create database schema for the test environment.
      *
-     * @param \Illuminate\Database\Schema\Builder  $schema
+     * @param  \Illuminate\Database\Schema\Builder  $schema
      */
-    abstract protected function createDatabaseSchema($schema): void;
+    protected function createDatabaseSchema($schema): void
+    {
+        //
+    }
 }

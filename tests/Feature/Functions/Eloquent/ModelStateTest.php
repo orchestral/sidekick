@@ -3,15 +3,22 @@
 namespace Orchestra\Sidekick\Tests\Feature\Functions\Eloquent;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Orchestra\Sidekick\SensitiveValue;
 use Orchestra\Sidekick\Tests\Concerns\InteractsWithDatabase;
 use PHPUnit\Framework\TestCase;
+
 use function Orchestra\Sidekick\Eloquent\model_state;
 
 class ModelStateTest extends TestCase
 {
     use InteractsWithDatabase;
+
+    /** {@inheritDoc} */
+    #[\Override]
+    protected function setUp(): void
+    {
+        $this->setUpTestEnvironmentForDatabase();
+    }
 
     /** {@inheritDoc} */
     protected function createDatabaseSchema($schema): void
