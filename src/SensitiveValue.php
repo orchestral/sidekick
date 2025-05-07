@@ -35,13 +35,16 @@ final class SensitiveValue implements JsonSerializable, Stringable
         return [];
     }
 
+    /**
+     * Get the value for string serialization.
+     */
     public function __toString(): string
     {
         return $this->jsonSerialize();
     }
 
     /**
-     * Get the value for serialization.
+     * Get the value for JSON serialization.
      */
     public function jsonSerialize(): string
     {
