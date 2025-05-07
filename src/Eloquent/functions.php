@@ -24,7 +24,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\column_name')) {
      *
      * @throws \InvalidArgumentException
      */
-    function column_name($model, string $attribute): string
+    function column_name(Model|string $model, string $attribute): string
     {
         if (\is_string($model)) {
             $model = new $model;
@@ -50,7 +50,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\is_pivot_model')) {
      *
      * @throws \InvalidArgumentException
      */
-    function is_pivot_model($model): bool
+    function is_pivot_model(Model|Pivot|string $model): bool
     {
         if (\is_string($model)) {
             $model = new $model;
@@ -76,7 +76,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_exists')) {
      *
      * @param  \Illuminate\Database\Eloquent\Model|mixed  $model
      */
-    function model_exists($model): bool
+    function model_exists(mixed $model): bool
     {
         return $model instanceof Model && $model->exists === true;
     }
@@ -92,7 +92,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
      *
      * @throws \InvalidArgumentException
      */
-    function model_key_type($model): string
+    function model_key_type(Model|string $model): string
     {
         if (\is_string($model)) {
             $model = new $model;
@@ -190,7 +190,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\table_name')) {
      *
      * @throws \InvalidArgumentException
      */
-    function table_name($model): string
+    function table_name(Model|string $model): string
     {
         if (\is_string($model)) {
             $model = new $model;
