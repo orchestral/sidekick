@@ -14,7 +14,7 @@ final class SensitiveValue implements JsonSerializable, Stringable
      * Construct a new sensitive value.
      */
     public function __construct(
-        private mixed $value
+        private readonly mixed $value
     ) {
         //
     }
