@@ -120,9 +120,12 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
      *
      * @api
      *
+     * @template TPivotModel of (\Illuminate\Database\Eloquent\Model&\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot)|\Illuminate\Database\Eloquent\Relations\Pivot
+     *
+     * @param  TPivotModel  $model
      * @return array{0: array<string, mixed>|null, 1: array<string, mixed>}
      */
-    function model_state(Model $model): array
+    function model_state(Pivot|Model $model): array
     {
         $copy = clone $model;
         $hiddenAttributes = $model->getHidden();
