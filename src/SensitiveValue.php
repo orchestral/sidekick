@@ -2,10 +2,13 @@
 
 namespace Orchestra\Sidekick;
 
+use JsonSerializable;
+use Stringable;
+
 /**
  * @api
  */
-final class SensitiveValue implements JsonSerializable
+final class SensitiveValue implements JsonSerializable, Stringable
 {
     /**
      * Construct a new sensitive value.
@@ -32,10 +35,15 @@ final class SensitiveValue implements JsonSerializable
         return [];
     }
 
+    public function __toString(): string
+    {
+        return $this->jsonSerialize();
+    }
+
     /**
      * Get the value for serialization.
      */
-    public function jsonSerializable(): string
+    public function jsonSerialize(): string
     {
         return '******';
     }
