@@ -50,7 +50,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\is_pivot_model')) {
      *
      * @throws \InvalidArgumentException
      */
-    function is_pivot_model(Model|Pivot|string $model): bool
+    function is_pivot_model(Pivot|Model|string $model): bool
     {
         if (\is_string($model)) {
             $model = new $model;
