@@ -15,5 +15,6 @@ class SensitiveValueTest extends TestCase
         $this->assertSame([], $stub->__debugInfo());
         $this->assertSame('******', $stub->jsonSerialize());
         $this->assertSame('******', (string) $stub);
+        $this->assertSame('"******"', json_encode($stub));
     }
 }

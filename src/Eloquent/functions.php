@@ -124,7 +124,10 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
      */
     function model_state(Model $model): array
     {
+        $copy = clone $model;
         $hiddenAttributes = $model->getHidden();
+
+        $copy->setHidden([]);
 
         $sanitizeValues = function (array $attributes) use ($hiddenAttributes): array {
             return Collection::make($attributes)
@@ -137,12 +140,12 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
 
         if (! model_exists($model)) {
             $original = null;
-            $changes = $sanitizeValues($model->attributesToArray());
+            $changes = $sanitizeValues($copy->attributesToArray());
 
             return [$original, $changes];
         }
 
-        $changes = $sanitizeValues($model->getDirty());
+        $changes = $sanitizeValues($copy->getDirty());
         $original = $sanitizeValues(
             array_intersect_key($model->newInstance()->setRawAttributes($model->getRawOriginal())->attributesToArray(), $changes)
         );
