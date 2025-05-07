@@ -50,7 +50,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\is_pivot_model')) {
      *
      * @throws \InvalidArgumentException
      */
-    function is_pivot_model(Model|Pivot|string $model): bool
+    function is_pivot_model(Pivot|Model|string $model): bool
     {
         if (\is_string($model)) {
             $model = new $model;
@@ -118,9 +118,12 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
      *
      * @api
      *
+     * @template TPivotModel of (\Illuminate\Database\Eloquent\Model&\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot)|\Illuminate\Database\Eloquent\Relations\Pivot
+     *
+     * @param  TPivotModel  $model
      * @return array{0: array<string, mixed>|null, 1: array<string, mixed>}
      */
-    function model_state(Model $model): array
+    function model_state(Pivot|Model $model): array
     {
         $copy = clone $model;
         $hiddenAttributes = $model->getHidden();
@@ -136,7 +139,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
                 )->all();
         };
 
-        if (! model_exists($model)) {
+        if (! model_exists($model) || $model->wasRecentlyCreated == true) {
             $original = null;
             $changes = $sanitizeValues($copy->attributesToArray());
 

@@ -20,7 +20,7 @@ final class UndefinedValue implements JsonSerializable
     }
 
     /**
-     * Get the value for serialization.
+     * Get the value for JSON serialization.
      *
      * @return null
      */
