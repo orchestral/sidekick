@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use Stringable;
 use Throwable;
@@ -109,6 +110,38 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
         }
 
         return $model->getKeyType();
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
+    /**
+     * Check whether given $model key type.
+     *
+     * @api
+     *
+     * @return array{0: array<string, mixed>|null, 1: array<string, mixed>}
+     */
+    function model_state(Model $model): array
+    {
+        $transform = function (array $attributes): array {
+            return Collection::make($attributes)
+                ->transform(static fn ($value) => normalize_value($value))
+                ->all();
+        };
+
+        if (! model_exists($model)) {
+            $original = null;
+            $changes = array_diff_key($model->attributesToArray(), array_flip($model->getHidden()));
+
+            return [$original, $changes];
+        }
+
+        $changes = array_diff_key($model->getDirty(), array_flip($model->getHidden()));
+        $original = $transform(
+            array_intersect_key($model->newInstance()->setRawAttributes($model->getRawOriginal())->attributesToArray(), $changes)
+        );
+
+        return [$original, $changes];
     }
 }
 
