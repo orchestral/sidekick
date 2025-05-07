@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
+use Orchestra\Sidekick\SensitiveValue;
 use Stringable;
 use Throwable;
 
@@ -128,7 +129,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
         $sanitizeValues = function (array $attributes) use ($hiddenAttributes): array {
             return Collection::make($attributes)
                 ->map(
-                    static fn (mixed $value, string $attribute) => in_array($attribute, $hiddenAttributes, true)
+                    static fn (mixed $value, string $attribute) => \in_array($attribute, $hiddenAttributes, true)
                         ? new SensitiveValue($value)
                         : normalize_value($value)
                 )->all();
@@ -142,7 +143,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
         }
 
         $changes = $sanitizeValues($model->getDirty());
-        $original = $transform(
+        $original = $sanitizeValues(
             array_intersect_key($model->newInstance()->setRawAttributes($model->getRawOriginal())->attributesToArray(), $changes)
         );
 
