@@ -1,6 +1,6 @@
 <?php
 
-namespace Orchestra\Sidekick\Tests\Functions\Eloquent;
+namespace Orchestra\Sidekick\Tests\Unit\Functions\Eloquent;
 
 use Illuminate\Support\Fluent;
 use PHPUnit\Framework\Attributes\DataProvider;
