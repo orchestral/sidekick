@@ -116,7 +116,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
 
 if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
     /**
-     * Check whether given $model key type.
+     * Get attributes original and changed state from a model.
      *
      * @api
      *
