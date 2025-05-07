@@ -123,20 +123,25 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
      */
     function model_state(Model $model): array
     {
-        $transform = function (array $attributes): array {
+        $hiddenAttributes = $model->getHidden();
+
+        $sanitizeValues = function (array $attributes) use ($hiddenAttributes): array {
             return Collection::make($attributes)
-                ->transform(static fn ($value) => normalize_value($value))
-                ->all();
+                ->map(
+                    static fn (mixed $value, string $attribute) => in_array($attribute, $hiddenAttributes, true)
+                        ? new SensitiveValue($value)
+                        : normalize_value($value)
+                )->all();
         };
 
         if (! model_exists($model)) {
             $original = null;
-            $changes = array_diff_key($model->attributesToArray(), array_flip($model->getHidden()));
+            $changes = $sanitizeValues($model->attributesToArray());
 
             return [$original, $changes];
         }
 
-        $changes = array_diff_key($model->getDirty(), array_flip($model->getHidden()));
+        $changes = $sanitizeValues($model->getDirty());
         $original = $transform(
             array_intersect_key($model->newInstance()->setRawAttributes($model->getRawOriginal())->attributesToArray(), $changes)
         );
