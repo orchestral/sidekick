@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Collection;
 use InvalidArgumentException;
+use Orchestra\Sidekick\SensitiveValue;
 use Stringable;
 use Throwable;
 
@@ -107,6 +109,46 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
         }
 
         return $model->getKeyType();
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
+    /**
+     * Get attributes original and changed state from a model.
+     *
+     * @api
+     *
+     * @return array{0: array<string, mixed>|null, 1: array<string, mixed>}
+     */
+    function model_state(Model $model): array
+    {
+        $copy = clone $model;
+        $hiddenAttributes = $model->getHidden();
+
+        $copy->setHidden([]);
+
+        $sanitizeValues = function (array $attributes) use ($hiddenAttributes): array {
+            return Collection::make($attributes)
+                ->map(
+                    static fn (mixed $value, string $attribute) => \in_array($attribute, $hiddenAttributes, true)
+                        ? new SensitiveValue($value)
+                        : normalize_value($value)
+                )->all();
+        };
+
+        if (! model_exists($model)) {
+            $original = null;
+            $changes = $sanitizeValues($copy->attributesToArray());
+
+            return [$original, $changes];
+        }
+
+        $changes = $sanitizeValues($copy->getDirty());
+        $original = $sanitizeValues(
+            array_intersect_key($model->newInstance()->setRawAttributes($model->getRawOriginal())->attributesToArray(), $changes)
+        );
+
+        return [$original, $changes];
     }
 }
 

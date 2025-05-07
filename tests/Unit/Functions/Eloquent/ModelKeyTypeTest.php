@@ -1,6 +1,6 @@
 <?php
 
-namespace Orchestra\Sidekick\Tests\Functions\Eloquent;
+namespace Orchestra\Sidekick\Tests\Unit\Functions\Eloquent;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;

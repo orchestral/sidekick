@@ -1,6 +1,5 @@
 name: integration tests
 
-
 on:
   push:
     branches:
@@ -80,7 +79,7 @@ jobs:
           - "highest"
           - "lowest"
         phpunit:
-          - '~12.0.0'
+          - '^12.0'
           - '^11.0'
           - '^10.0'
         include:
@@ -107,8 +106,8 @@ jobs:
       - name: Install dependencies
         uses: "ramsey/composer-install@v3"
         with:
-          dependency-versions: "${{ matrix.dependencies }} --with=phpunit/phpunit:${{ matrix.phpunit }}"
-          composer-options: "--prefer-dist --no-cache"
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "--prefer-dist --no-cache --with=phpunit/phpunit:${{ matrix.phpunit }}"
 
       - name: Installed dependencies
         run: composer show -D

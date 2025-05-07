@@ -1,0 +1,50 @@
+<?php
+
+namespace Orchestra\Sidekick;
+
+use JsonSerializable;
+use Stringable;
+
+/**
+ * @api
+ */
+final class SensitiveValue implements JsonSerializable, Stringable
+{
+    /**
+     * Construct a new sensitive value.
+     */
+    public function __construct(
+        private mixed $value
+    ) {
+        //
+    }
+
+    /**
+     * Get the original value.
+     */
+    public function getValue(): mixed
+    {
+        return $this->value;
+    }
+
+    /**
+     * Transform the value for debugging.
+     */
+    public function __debugInfo(): array
+    {
+        return [];
+    }
+
+    public function __toString(): string
+    {
+        return $this->jsonSerialize();
+    }
+
+    /**
+     * Get the value for serialization.
+     */
+    public function jsonSerialize(): string
+    {
+        return '******';
+    }
+}
