@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use Orchestra\Sidekick\SensitiveValue;
 use Stringable;
@@ -187,7 +186,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\summarize_changes')) {
         $summaries = [];
 
         foreach ($changes as $attribute => $value) {
-            $summaries[] = in_array($attribute, $hiddens, true)
+            $summaries[$attribute] = \in_array($attribute, $hiddens, true)
                 ? new SensitiveValue($value)
                 : normalize_value($value);
         }
