@@ -38,7 +38,7 @@ class NormalizeValueTest extends TestCase
         yield [['framework' => 'laravel'], '{"framework":"laravel"}'];
         yield [new Fluent(['framework' => 'laravel']), '{"framework":"laravel"}'];
         yield [collect([['framework' => 'laravel']]), '[{"framework":"laravel"}]'];
-        yield [$now, $now->jsonSerialize()];
+        yield [$now, $now->toJSON()];
         yield [
             new class
             {
