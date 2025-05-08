@@ -28,13 +28,13 @@ class SummarizeChangesTest extends TestCase
 
         $this->assertEquals($expected, $visibleSummaries->all());
 
-        $this->assertSame($hiddenSummaries->count(), count($hiddens));
+        $this->assertSame($hiddenSummaries->count(), \count($hiddens));
 
         foreach ($hiddens as $key) {
             $this->assertInstanceOf(SensitiveValue::class, $summaries[$key]);
         }
 
-        $this->assertSame($hiddenSummaries->count(), count($hiddens));
+        $this->assertSame($hiddenSummaries->count(), \count($hiddens));
     }
 
     public static function valuesDataProvider()
