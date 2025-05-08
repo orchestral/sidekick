@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use JsonSerializable;
 use Orchestra\Sidekick\SensitiveValue;
@@ -126,29 +125,21 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
     function model_state(Model $model): array
     {
         $copy = clone $model;
-        $hiddenAttributes = $model->getHidden();
+        $hiddens = $model->getHidden();
 
         $copy->setHidden([]);
 
-        $sanitizeValues = function (array $attributes) use ($hiddenAttributes): array {
-            return Collection::make($attributes)
-                ->map(
-                    static fn (mixed $value, string $attribute) => \in_array($attribute, $hiddenAttributes, true)
-                        ? new SensitiveValue($value)
-                        : normalize_value($value)
-                )->all();
-        };
-
         if (! model_exists($model) || $model->wasRecentlyCreated == true) {
             $original = null;
-            $changes = $sanitizeValues($copy->attributesToArray());
+            $changes = summarize_changes($copy->attributesToArray(), hiddens: $hiddens);
 
             return [$original, $changes];
         }
 
-        $changes = $sanitizeValues($copy->getDirty());
-        $original = $sanitizeValues(
-            array_intersect_key($model->newInstance()->setRawAttributes($model->getRawOriginal())->attributesToArray(), $changes)
+        $changes = summarize_changes($copy->getDirty(), hiddens: $hiddens);
+        $original = summarize_changes(
+            array_intersect_key($model->newInstance()->setRawAttributes($model->getRawOriginal())->attributesToArray(), $changes),
+            hiddens: $hiddens
         );
 
         return [$original, $changes];
@@ -182,6 +173,30 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\normalize_value')) {
         }
 
         return $value;
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\Eloquent\summarize_changes')) {
+    /**
+     * Get table name from Eloquent model.
+     *
+     * @api
+     *
+     * @param  array<string, mixed>  $changes
+     * @param  array<int, string>  $hiddens
+     * @return array<string, \Orchestra\Sidekick\SensitiveValue|scalar>
+     */
+    function summarize_changes(array $changes, array $hiddens = []): array
+    {
+        $summaries = [];
+
+        foreach ($changes as $attribute => $value) {
+            $summaries[$attribute] = \in_array($attribute, $hiddens, true)
+                ? new SensitiveValue($value)
+                : normalize_value($value);
+        }
+
+        return $summaries;
     }
 }
 
