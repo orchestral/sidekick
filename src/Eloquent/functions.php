@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use InvalidArgumentException;
+use JsonSerializable;
 use Orchestra\Sidekick\SensitiveValue;
 use Stringable;
 use Throwable;
@@ -155,11 +156,17 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\normalize_value')) {
      */
     function normalize_value(mixed $value): mixed
     {
+        if ($value instanceof JsonSerializable) {
+            $value = $value->jsonSerialize();
+        }
+
         if ($value instanceof BackedEnum) {
             return $value->value;
         } elseif (\is_object($value) && $value instanceof Stringable) {
             return (string) $value;
-        } elseif (\is_object($value) || \is_array($value)) {
+        }
+
+        if (\is_object($value) || \is_array($value)) {
             try {
                 return json_encode($value);
             } catch (Throwable $e) { // @phpstan-ignore catch.neverThrown
