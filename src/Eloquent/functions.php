@@ -164,9 +164,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\normalize_value')) {
             return $value->value;
         } elseif (\is_object($value) && $value instanceof Stringable) {
             return (string) $value;
-        }
-
-        if (\is_object($value) || \is_array($value)) {
+        } elseif (\is_object($value) || \is_array($value)) {
             try {
                 return json_encode($value);
             } catch (Throwable $e) { // @phpstan-ignore catch.neverThrown
