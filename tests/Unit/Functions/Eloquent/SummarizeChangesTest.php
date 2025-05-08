@@ -36,7 +36,7 @@ class SummarizeChangesTest extends TestCase
         yield [
             ['name' => 'Mior Muhammad Zaki', 'password' => $password, 'created_at' => $now],
             null,
-            ['name' => 'Mior Muhammad Zaki', 'password' => $password, 'created_at' => $now->jsonSerialize()],
+            ['name' => 'Mior Muhammad Zaki', 'password' => $password, 'created_at' => $now->toJSON()],
         ];
 
         yield [
