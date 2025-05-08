@@ -3,6 +3,7 @@
 namespace Orchestra\Sidekick\Tests\Unit\Functions\Eloquent;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Collection;
 use Orchestra\Sidekick\SensitiveValue;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -21,11 +22,19 @@ class SummarizeChangesTest extends TestCase
 
         $summaries = summarize_changes($given, $hiddens);
 
-        $this->assertArrayIsEqualToArrayIgnoringListOfKeys($expected, $summaries, $hiddens);
+        [$visibleSummaries, $hiddenSummaries] = Collection::make($summaries)->partition(
+            fn ($value, $key) => ! \in_array($key, $hiddens, true)
+        );
+
+        $this->assertEquals($expected, $visibleSummaries->all());
+
+        $this->assertSame($hiddenSummaries->count(), count($hiddens));
 
         foreach ($hiddens as $key) {
             $this->assertInstanceOf(SensitiveValue::class, $summaries[$key]);
         }
+
+        $this->assertSame($hiddenSummaries->count(), count($hiddens));
     }
 
     public static function valuesDataProvider()
@@ -42,7 +51,7 @@ class SummarizeChangesTest extends TestCase
         yield [
             ['name' => 'Mior Muhammad Zaki', 'password' => $password],
             ['password'],
-            ['name' => 'Mior Muhammad Zaki', 'password' => '*******'],
+            ['name' => 'Mior Muhammad Zaki'],
         ];
     }
 }
