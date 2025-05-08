@@ -5,6 +5,7 @@ namespace Orchestra\Sidekick\Tests\Unit\Functions\Eloquent;
 use Carbon\CarbonImmutable;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+
 use function Orchestra\Sidekick\Eloquent\summarize_changes;
 
 class SummarizeChangesTest extends TestCase
