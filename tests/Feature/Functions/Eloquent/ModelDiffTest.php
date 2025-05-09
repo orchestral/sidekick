@@ -8,9 +8,9 @@ use Orchestra\Sidekick\SensitiveValue;
 use Orchestra\Sidekick\Tests\Concerns\InteractsWithDatabase;
 use PHPUnit\Framework\TestCase;
 
-use function Orchestra\Sidekick\Eloquent\model_state;
+use function Orchestra\Sidekick\Eloquent\model_diff;
 
-class ModelStateTest extends TestCase
+class ModelDiffTest extends TestCase
 {
     use InteractsWithDatabase;
 
@@ -39,9 +39,8 @@ class ModelStateTest extends TestCase
             'updated_at' => $now,
         ]);
 
-        [$original, $changes] = model_state($user);
+        $changes = model_diff($user);
 
-        $this->assertNull($original);
         $this->assertSame(['name', 'email', 'password', 'created_at'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki', $changes['name']);
         $this->assertSame('crynobone@gmail.com', $changes['email']);
@@ -65,9 +64,8 @@ class ModelStateTest extends TestCase
         $user->exists = true;
         $user->wasRecentlyCreated = true;
 
-        [$original, $changes] = model_state($user);
+        $changes = model_diff($user);
 
-        $this->assertNull($original);
         $this->assertSame(['name', 'email', 'password', 'created_at'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki', $changes['name']);
         $this->assertSame('crynobone@gmail.com', $changes['email']);
@@ -93,9 +91,8 @@ class ModelStateTest extends TestCase
         $user->password = password_hash('password', PASSWORD_DEFAULT);
         $user->updated_at = $now;
 
-        [$original, $changes] = model_state($user);
+        $changes = model_diff($user);
 
-        $this->assertSame(['name' => 'Mior Muhammad Zaki'], $original);
         $this->assertSame(['name', 'password', 'updated_at'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki bin Mior Khairuddin', $changes['name']);
         $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
@@ -113,9 +110,8 @@ class ModelStateTest extends TestCase
             'updated_at' => $now,
         ]);
 
-        [$original, $changes] = model_state($user, withTimestamps: false);
+        $changes = model_diff($user, withTimestamps: false);
 
-        $this->assertNull($original);
         $this->assertSame(['name', 'email', 'password'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki', $changes['name']);
         $this->assertSame('crynobone@gmail.com', $changes['email']);
@@ -141,11 +137,29 @@ class ModelStateTest extends TestCase
         $user->password = password_hash('password', PASSWORD_DEFAULT);
         $user->updateTimestamps();
 
-        [$original, $changes] = model_state($user, withTimestamps: false);
+        $changes = model_diff($user, withTimestamps: false);
 
-        $this->assertSame(['name' => 'Mior Muhammad Zaki'], $original);
         $this->assertSame(['name', 'password'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki bin Mior Khairuddin', $changes['name']);
         $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
+    }
+
+    public function test_it_can_excludes_given_fields()
+    {
+        $now = CarbonImmutable::now();
+
+        $user = (new User)->forceFill([
+            'name' => 'Mior Muhammad Zaki',
+            'email' => 'crynobone@gmail.com',
+            'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+
+        $changes = model_diff($user, ['password'], false);
+
+        $this->assertSame(['name', 'email'], array_keys($changes));
+        $this->assertSame('Mior Muhammad Zaki', $changes['name']);
+        $this->assertSame('crynobone@gmail.com', $changes['email']);
     }
 }

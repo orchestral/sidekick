@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
 use InvalidArgumentException;
+use JsonSerializable;
 use Orchestra\Sidekick\SensitiveValue;
 use Stringable;
 use Throwable;
@@ -112,40 +113,58 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
     }
 }
 
+if (! \function_exists('Orchestra\Sidekick\Eloquent\model_diff')) {
+    /**
+     * Get attributes diff state from a model.
+     *
+     * @api
+     *
+     * @param  array<int, string>  $excludes
+     * @return array<string, mixed>
+     */
+    function model_diff(Model $model, array $excludes = [], bool $withTimestamps = true): array
+    {
+        $copy = clone $model;
+        $hiddens = $model->getHidden();
+
+        $timestamps = [$model->getCreatedAtColumn(), $model->getUpdatedAtColumn()];
+
+        $copy->setHidden($excludes);
+
+        if (! model_exists($model) || $model->wasRecentlyCreated == true) {
+            return Arr::except(
+                summarize_changes($copy->attributesToArray(), hiddens: $hiddens),
+                $withTimestamps === false ? $timestamps : [$model->getUpdatedAtColumn()]
+            );
+        }
+
+        return Arr::except(
+            summarize_changes($copy->getDirty(), hiddens: $hiddens),
+            $withTimestamps === false ? $timestamps : []
+        );
+    }
+}
+
 if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
     /**
      * Get attributes original and changed state from a model.
      *
      * @api
      *
+     * @param  array<int, string>  $excludes
      * @return array{0: array<string, mixed>|null, 1: array<string, mixed>}
      */
-    function model_state(Model $model): array
+    function model_state(Model $model, array $excludes = [], bool $withTimestamps = true): array
     {
-        $copy = clone $model;
-        $hiddenAttributes = $model->getHidden();
-
-        $copy->setHidden([]);
-
-        $sanitizeValues = function (array $attributes) use ($hiddenAttributes): array {
-            return Collection::make($attributes)
-                ->map(
-                    static fn (mixed $value, string $attribute) => \in_array($attribute, $hiddenAttributes, true)
-                        ? new SensitiveValue($value)
-                        : normalize_value($value)
-                )->all();
-        };
+        $changes = model_diff($model, $excludes, $withTimestamps);
 
         if (! model_exists($model) || $model->wasRecentlyCreated == true) {
-            $original = null;
-            $changes = $sanitizeValues($copy->attributesToArray());
-
-            return [$original, $changes];
+            return [null, $changes];
         }
 
-        $changes = $sanitizeValues($copy->getDirty());
-        $original = $sanitizeValues(
-            array_intersect_key($model->newInstance()->setRawAttributes($model->getRawOriginal())->attributesToArray(), $changes)
+        $original = summarize_changes(
+            array_intersect_key($model->newInstance()->setRawAttributes($model->getRawOriginal())->attributesToArray(), $changes),
+            hiddens: $model->getHidden(),
         );
 
         return [$original, $changes];
@@ -162,6 +181,10 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\normalize_value')) {
      */
     function normalize_value(mixed $value): mixed
     {
+        if ($value instanceof JsonSerializable) {
+            $value = $value->jsonSerialize();
+        }
+
         if ($value instanceof BackedEnum) {
             return $value->value;
         } elseif (\is_object($value) && $value instanceof Stringable) {
@@ -175,6 +198,30 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\normalize_value')) {
         }
 
         return $value;
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\Eloquent\summarize_changes')) {
+    /**
+     * Get table name from Eloquent model.
+     *
+     * @api
+     *
+     * @param  array<string, mixed>  $changes
+     * @param  array<int, string>  $hiddens
+     * @return array<string, \Orchestra\Sidekick\SensitiveValue|scalar>
+     */
+    function summarize_changes(array $changes, array $hiddens = []): array
+    {
+        $summaries = [];
+
+        foreach ($changes as $attribute => $value) {
+            $summaries[$attribute] = \in_array($attribute, $hiddens, true)
+                ? new SensitiveValue($value)
+                : normalize_value($value);
+        }
+
+        return $summaries;
     }
 }
 

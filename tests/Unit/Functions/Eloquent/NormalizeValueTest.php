@@ -4,6 +4,7 @@ namespace Orchestra\Sidekick\Tests\Unit\Functions\Eloquent;
 
 use App\Enums\TestBackedEnum;
 use App\Enums\TestStringBackedEnum;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Fluent;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -40,11 +41,14 @@ class NormalizeValueTest extends TestCase
 
     public static function valuesDataProvider()
     {
+        $now = CarbonImmutable::now();
+
         yield ['laravel', 'laravel'];
         yield [123, 123];
         yield [['framework' => 'laravel'], '{"framework":"laravel"}'];
         yield [new Fluent(['framework' => 'laravel']), '{"framework":"laravel"}'];
         yield [collect([['framework' => 'laravel']]), '[{"framework":"laravel"}]'];
+        yield [$now, $now->toJSON()];
         yield [
             new class
             {
