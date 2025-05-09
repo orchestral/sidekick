@@ -121,28 +121,32 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
      *
      * @api
      *
+     * @param  array<int, string>  $excludes
+     *
      * @return array{0: array<string, mixed>|null, 1: array<string, mixed>}
      */
-    function model_state(Model $model): array
+    function model_state(Model $model, array $excludes = [], bool $withTimestamps = true): array
     {
         $copy = clone $model;
         $hiddens = $model->getHidden();
 
         $timestamps = [$model->getCreatedAtColumn(), $model->getUpdatedAtColumn()];
 
-        $copy->setHidden([]);
+        $copy->setHidden($excludes);
 
         if (! model_exists($model) || $model->wasRecentlyCreated == true) {
             $original = null;
             $changes = Arr::except(
-                summarize_changes($copy->attributesToArray(), hiddens: $hiddens), $timestamps
+                summarize_changes($copy->attributesToArray(), hiddens: $hiddens),
+                $withTimestamps === false ? $timestamps : [$model->getUpdatedAtColumn()]
             );
 
             return [$original, $changes];
         }
 
         $changes = Arr::except(
-            summarize_changes($copy->getDirty(), hiddens: $hiddens), $timestamps
+            summarize_changes($copy->getDirty(), hiddens: $hiddens),
+            $withTimestamps === false ? $timestamps : []
         );
 
         $original = summarize_changes(

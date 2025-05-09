@@ -29,27 +29,36 @@ class ModelStateTest extends TestCase
 
     public function test_it_can_detect_changes_on_creating_a_model()
     {
+        $now = CarbonImmutable::now();
+
         $user = (new User)->forceFill([
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
             'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
+            'created_at' => $now,
+            'updated_at' => $now,
         ]);
 
         [$original, $changes] = model_state($user);
 
         $this->assertNull($original);
-        $this->assertSame(['name', 'email', 'password'], array_keys($changes));
+        $this->assertSame(['name', 'email', 'password', 'created_at'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki', $changes['name']);
         $this->assertSame('crynobone@gmail.com', $changes['email']);
+        $this->assertSame($now->startOfSecond()->toJSON(), $changes['created_at']);
         $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
     }
 
     public function test_it_can_detect_changes_on_recently_created_model()
     {
+        $now = CarbonImmutable::now();
+
         $user = (new User)->forceFill([
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
             'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
+            'created_at' => $now,
+            'updated_at' => $now,
         ]);
 
         $user->syncOriginal();
@@ -59,18 +68,22 @@ class ModelStateTest extends TestCase
         [$original, $changes] = model_state($user);
 
         $this->assertNull($original);
-        $this->assertSame(['name', 'email', 'password'], array_keys($changes));
+        $this->assertSame(['name', 'email', 'password', 'created_at'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki', $changes['name']);
         $this->assertSame('crynobone@gmail.com', $changes['email']);
+        $this->assertSame($now->startOfSecond()->toJSON(), $changes['created_at']);
         $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
     }
 
     public function test_it_can_detect_changes_on_updating_a_model()
     {
+        $now = CarbonImmutable::now();
+
         $user = (new User([
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
             'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
+            'created_at' => $now,
         ]));
 
         $user->syncOriginal();
@@ -78,11 +91,12 @@ class ModelStateTest extends TestCase
         $user->exists = true;
         $user->name = 'Mior Muhammad Zaki bin Mior Khairuddin';
         $user->password = password_hash('password', PASSWORD_DEFAULT);
+        $user->updated_at = $now;
 
         [$original, $changes] = model_state($user);
 
         $this->assertSame(['name' => 'Mior Muhammad Zaki'], $original);
-        $this->assertSame(['name', 'password'], array_keys($changes));
+        $this->assertSame(['name', 'password', 'updated_at'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki bin Mior Khairuddin', $changes['name']);
         $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
     }
@@ -99,7 +113,7 @@ class ModelStateTest extends TestCase
             'updated_at' => $now,
         ]);
 
-        [$original, $changes] = model_state($user);
+        [$original, $changes] = model_state($user, withTimestamps: false);
 
         $this->assertNull($original);
         $this->assertSame(['name', 'email', 'password'], array_keys($changes));
@@ -127,7 +141,7 @@ class ModelStateTest extends TestCase
         $user->password = password_hash('password', PASSWORD_DEFAULT);
         $user->updateTimestamps();
 
-        [$original, $changes] = model_state($user);
+        [$original, $changes] = model_state($user, withTimestamps: false);
 
         $this->assertSame(['name' => 'Mior Muhammad Zaki'], $original);
         $this->assertSame(['name', 'password'], array_keys($changes));
