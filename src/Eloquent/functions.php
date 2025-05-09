@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use JsonSerializable;
 use Orchestra\Sidekick\SensitiveValue;
@@ -127,16 +128,23 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
         $copy = clone $model;
         $hiddens = $model->getHidden();
 
+        $timestamps = [$model->getCreatedAtColumn(), $model->getUpdatedAtColumn()];
+
         $copy->setHidden([]);
 
         if (! model_exists($model) || $model->wasRecentlyCreated == true) {
             $original = null;
-            $changes = summarize_changes($copy->attributesToArray(), hiddens: $hiddens);
+            $changes = Arr::except(
+                summarize_changes($copy->attributesToArray(), hiddens: $hiddens), $timestamps
+            );
 
             return [$original, $changes];
         }
 
-        $changes = summarize_changes($copy->getDirty(), hiddens: $hiddens);
+        $changes = Arr::except(
+            summarize_changes($copy->getDirty(), hiddens: $hiddens), $timestamps
+        );
+
         $original = summarize_changes(
             array_intersect_key($model->newInstance()->setRawAttributes($model->getRawOriginal())->attributesToArray(), $changes),
             hiddens: $hiddens
