@@ -122,7 +122,6 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
      * @api
      *
      * @param  array<int, string>  $excludes
-     *
      * @return array{0: array<string, mixed>|null, 1: array<string, mixed>}
      */
     function model_state(Model $model, array $excludes = [], bool $withTimestamps = true): array
