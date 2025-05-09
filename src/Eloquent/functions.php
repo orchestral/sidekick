@@ -115,6 +115,38 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
     }
 }
 
+if (! \function_exists('Orchestra\Sidekick\Eloquent\model_diff')) {
+    /**
+     * Get attributes diff state from a model.
+     *
+     * @api
+     *
+     * @param  array<int, string>  $excludes
+     * @return array<string, mixed>
+     */
+    function model_diff(Model $model, array $excludes = [], bool $withTimestamps = true): array
+    {
+        $copy = clone $model;
+        $hiddens = $model->getHidden();
+
+        $timestamps = [$model->getCreatedAtColumn(), $model->getUpdatedAtColumn()];
+
+        $copy->setHidden($excludes);
+
+        if (! model_exists($model) || $model->wasRecentlyCreated == true) {
+            return Arr::except(
+                summarize_changes($copy->attributesToArray(), hiddens: $hiddens),
+                $withTimestamps === false ? $timestamps : [$model->getUpdatedAtColumn()]
+            );
+        }
+
+        return Arr::except(
+            summarize_changes($copy->getDirty(), hiddens: $hiddens),
+            $withTimestamps === false ? $timestamps : []
+        );
+    }
+}
+
 if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
     /**
      * Get attributes original and changed state from a model.
@@ -126,31 +158,15 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
      */
     function model_state(Model $model, array $excludes = [], bool $withTimestamps = true): array
     {
-        $copy = clone $model;
-        $hiddens = $model->getHidden();
-
-        $timestamps = [$model->getCreatedAtColumn(), $model->getUpdatedAtColumn()];
-
-        $copy->setHidden($excludes);
+        $changes = model_diff($model, $excludes, $withTimestamps);
 
         if (! model_exists($model) || $model->wasRecentlyCreated == true) {
-            $original = null;
-            $changes = Arr::except(
-                summarize_changes($copy->attributesToArray(), hiddens: $hiddens),
-                $withTimestamps === false ? $timestamps : [$model->getUpdatedAtColumn()]
-            );
-
-            return [$original, $changes];
+            return [null, $changes];
         }
-
-        $changes = Arr::except(
-            summarize_changes($copy->getDirty(), hiddens: $hiddens),
-            $withTimestamps === false ? $timestamps : []
-        );
 
         $original = summarize_changes(
             array_intersect_key($model->newInstance()->setRawAttributes($model->getRawOriginal())->attributesToArray(), $changes),
-            hiddens: $hiddens
+            hiddens: $model->getHidden(),
         );
 
         return [$original, $changes];
