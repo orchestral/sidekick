@@ -163,6 +163,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
         if (! model_exists($model) || $model->wasRecentlyCreated == true) {
             return [null, $changes];
         }
+
         $original = summarize_changes(
             array_intersect_key($model->newInstance()->setRawAttributes($model->getRawOriginal())->attributesToArray(), $changes),
             hiddens: $model->getHidden(),
