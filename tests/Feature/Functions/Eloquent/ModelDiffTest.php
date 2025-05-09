@@ -143,4 +143,23 @@ class ModelDiffTest extends TestCase
         $this->assertSame('Mior Muhammad Zaki bin Mior Khairuddin', $changes['name']);
         $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
     }
+
+    public function test_it_can_excludes_given_fields()
+    {
+        $now = CarbonImmutable::now();
+
+        $user = (new User)->forceFill([
+            'name' => 'Mior Muhammad Zaki',
+            'email' => 'crynobone@gmail.com',
+            'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+
+        $changes = model_diff($user, ['password'], false);
+
+        $this->assertSame(['name', 'email'], array_keys($changes));
+        $this->assertSame('Mior Muhammad Zaki', $changes['name']);
+        $this->assertSame('crynobone@gmail.com', $changes['email']);
+    }
 }
