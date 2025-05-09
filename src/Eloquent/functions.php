@@ -128,7 +128,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
         $copy = clone $model;
         $hiddens = $model->getHidden();
 
-        $timestamps = [$model->getUpdatedAtColumn(), $model->getUpdatedAtColumn()];
+        $timestamps = [$model->getCreatedAtColumn(), $model->getUpdatedAtColumn()];
 
         $copy->setHidden([]);
 
