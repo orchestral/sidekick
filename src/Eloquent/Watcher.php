@@ -55,6 +55,9 @@ class Watcher
         return $model->isDirty() ? $model->getRawOriginal() : null;
     }
 
+    /**
+     * Flush the instance states.
+     */
     public static function flushState(): void
     {
         static::$cache = null;
