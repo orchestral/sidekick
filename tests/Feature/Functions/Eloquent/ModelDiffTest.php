@@ -87,9 +87,39 @@ class ModelDiffTest extends TestCase
         $user->syncOriginal();
 
         $user->exists = true;
+        $user->wasRecentlyCreated = false;
         $user->name = 'Mior Muhammad Zaki bin Mior Khairuddin';
         $user->password = password_hash('password', PASSWORD_DEFAULT);
         $user->updated_at = $now;
+
+        $changes = model_diff($user);
+
+        $this->assertSame(['name', 'password', 'updated_at'], array_keys($changes));
+        $this->assertSame('Mior Muhammad Zaki bin Mior Khairuddin', $changes['name']);
+        $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
+    }
+
+    public function test_it_can_detect_changes_after_updating_a_model()
+    {
+        $now = CarbonImmutable::now();
+
+        $user = (new User)->forceFill([
+            'name' => 'Mior Muhammad Zaki',
+            'email' => 'crynobone@gmail.com',
+            'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
+            'created_at' => $now,
+        ]);
+
+        $user->syncOriginal();
+
+        $user->exists = true;
+        $user->wasRecentlyCreated = false;
+        $user->name = 'Mior Muhammad Zaki bin Mior Khairuddin';
+        $user->password = password_hash('password', PASSWORD_DEFAULT);
+        $user->updated_at = $now;
+
+        $user->syncChanges();
+        $user->syncOriginal();
 
         $changes = model_diff($user);
 

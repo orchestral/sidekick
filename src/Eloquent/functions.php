@@ -140,8 +140,10 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_diff')) {
             );
         }
 
+        $changes = $copy->isDirty() ? $copy->getDirty() : $copy->getChanges();
+
         return Arr::except(
-            summarize_changes($copy->isDirty() ? $copy->getDirty() : $copy->getChanges(), hiddens: $hiddens),
+            summarize_changes($changes, hiddens: $hiddens),
             $withTimestamps === false ? $timestamps : []
         );
     }
