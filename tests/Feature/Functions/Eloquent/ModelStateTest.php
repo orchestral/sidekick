@@ -125,8 +125,6 @@ class ModelStateTest extends TestCase
 
         [$original, $changes] = model_state($user);
 
-        dd($original);
-
         $this->assertSame(['name', 'password', 'updated_at'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki bin Mior Khairuddin', $changes['name']);
         $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
