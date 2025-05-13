@@ -4,10 +4,12 @@ namespace Orchestra\Sidekick\Tests\Feature\Functions\Eloquent;
 
 use App\Models\User;
 use Carbon\CarbonImmutable;
+use Orchestra\Sidekick\Eloquent\Watcher;
 use Orchestra\Sidekick\SensitiveValue;
 use Orchestra\Sidekick\Tests\Concerns\InteractsWithDatabase;
 use PHPUnit\Framework\TestCase;
 
+use function Orchestra\Sidekick\Eloquent\model_snapshot;
 use function Orchestra\Sidekick\Eloquent\model_state;
 
 class ModelStateTest extends TestCase
@@ -19,6 +21,13 @@ class ModelStateTest extends TestCase
     protected function setUp(): void
     {
         $this->setUpTestEnvironmentForDatabase();
+    }
+
+    /** {@inheritDoc} */
+    #[\Override]
+    protected function tearDown(): void
+    {
+        Watcher::flushState();
     }
 
     /** {@inheritDoc} */
@@ -114,6 +123,8 @@ class ModelStateTest extends TestCase
 
         $user->syncOriginal();
 
+        model_snapshot($user);
+
         $user->exists = true;
         $user->wasRecentlyCreated = false;
         $user->name = 'Mior Muhammad Zaki bin Mior Khairuddin';
@@ -125,6 +136,37 @@ class ModelStateTest extends TestCase
 
         [$original, $changes] = model_state($user);
 
+        $this->assertSame('Mior Muhammad Zaki', $original['name']);
+        $this->assertSame(['name', 'password', 'updated_at'], array_keys($changes));
+        $this->assertSame('Mior Muhammad Zaki bin Mior Khairuddin', $changes['name']);
+        $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
+    }
+
+    public function test_it_can_detect_changes_after_updating_a_model_without_snapshot()
+    {
+        $now = CarbonImmutable::now();
+
+        $user = (new User)->forceFill([
+            'name' => 'Mior Muhammad Zaki',
+            'email' => 'crynobone@gmail.com',
+            'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
+            'created_at' => $now,
+        ]);
+
+        $user->syncOriginal();
+
+        $user->exists = true;
+        $user->wasRecentlyCreated = false;
+        $user->name = 'Mior Muhammad Zaki bin Mior Khairuddin';
+        $user->password = password_hash('password', PASSWORD_DEFAULT);
+        $user->updated_at = $now;
+
+        $user->syncChanges();
+        $user->syncOriginal();
+
+        [$original, $changes] = model_state($user);
+
+        $this->assertFalse(isset($original['name']));
         $this->assertSame(['name', 'password', 'updated_at'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki bin Mior Khairuddin', $changes['name']);
         $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
