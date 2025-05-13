@@ -5,6 +5,9 @@ namespace Orchestra\Sidekick\Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use WeakMap;
 
+/**
+ * @internal
+ */
 class Watcher
 {
     /**
