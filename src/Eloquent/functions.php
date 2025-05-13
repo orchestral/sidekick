@@ -140,7 +140,12 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_diff')) {
             );
         }
 
-        $changes = $copy->isDirty() ? $copy->getDirty() : $copy->getChanges();
+        $rawChanges = $copy->isDirty() ? $copy->getDirty() : $copy->getChanges();
+
+        $changes = array_intersect_key(
+            $copy->newInstance()->setHidden($excludes)->setRawAttributes($rawChanges)->attributesToArray(),
+            $rawChanges
+        );
 
         return Arr::except(
             summarize_changes($changes, hiddens: $hiddens),

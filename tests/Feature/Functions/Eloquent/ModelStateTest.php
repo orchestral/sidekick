@@ -92,7 +92,8 @@ class ModelStateTest extends TestCase
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
             'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
-            'created_at' => $now,
+            'created_at' => $now->subMinutes(2),
+            'updated_at' => $now->subMinutes(2),
         ]);
 
         $user->syncOriginal();
@@ -104,9 +105,10 @@ class ModelStateTest extends TestCase
 
         [$original, $changes] = model_state($user);
 
-        $this->assertSame(['name' => 'Mior Muhammad Zaki'], $original);
+        $this->assertSame(['name' => 'Mior Muhammad Zaki', 'updated_at' => $now->subMinutes(2)->startOfSecond()->toJSON()], $original);
         $this->assertSame(['name', 'password', 'updated_at'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki bin Mior Khairuddin', $changes['name']);
+        $this->assertSame($now->startOfSecond()->toJSON(), $changes['updated_at']);
         $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
     }
 
@@ -118,7 +120,8 @@ class ModelStateTest extends TestCase
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
             'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
-            'created_at' => $now,
+            'created_at' => $now->subMinutes(2),
+            'updated_at' => $now->subMinutes(2),
         ]);
 
         $user->syncOriginal();
@@ -136,9 +139,10 @@ class ModelStateTest extends TestCase
 
         [$original, $changes] = model_state($user);
 
-        $this->assertSame('Mior Muhammad Zaki', $original['name']);
+        $this->assertSame(['name' => 'Mior Muhammad Zaki', 'updated_at' => $now->subMinutes(2)->startOfSecond()->toJSON()], $original);
         $this->assertSame(['name', 'password', 'updated_at'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki bin Mior Khairuddin', $changes['name']);
+        $this->assertSame($now->startOfSecond()->toJSON(), $changes['updated_at']);
         $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
     }
 
@@ -150,7 +154,8 @@ class ModelStateTest extends TestCase
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
             'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
-            'created_at' => $now,
+            'created_at' => $now->subMinutes(2),
+            'updated_at' => $now->subMinutes(2),
         ]);
 
         $user->syncOriginal();
@@ -166,9 +171,10 @@ class ModelStateTest extends TestCase
 
         [$original, $changes] = model_state($user);
 
-        $this->assertFalse(isset($original['name']));
+        $this->assertSame([], array_keys($original));
         $this->assertSame(['name', 'password', 'updated_at'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki bin Mior Khairuddin', $changes['name']);
+        $this->assertSame($now->startOfSecond()->toJSON(), $changes['updated_at']);
         $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
     }
 
