@@ -4,6 +4,7 @@ namespace Orchestra\Sidekick\Tests\Feature\Functions\Eloquent;
 
 use App\Models\User;
 use Carbon\CarbonImmutable;
+use Orchestra\Sidekick\Eloquent\Watcher;
 use Orchestra\Sidekick\SensitiveValue;
 use Orchestra\Sidekick\Tests\Concerns\InteractsWithDatabase;
 use PHPUnit\Framework\TestCase;
@@ -20,6 +21,13 @@ class ModelStateTest extends TestCase
     protected function setUp(): void
     {
         $this->setUpTestEnvironmentForDatabase();
+    }
+
+    /** {@inheritDoc} */
+    #[\Override]
+    protected function tearDown(): void
+    {
+        Watcher::flushState();
     }
 
     /** {@inheritDoc} */
