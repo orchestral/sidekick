@@ -30,29 +30,22 @@ class Watcher
      *
      * @return array<string, mixed>
      */
-    public static function snapshot(Model $model): array
+    public static function snapshot(Model $model): ?array
     {
-        $original = $model->getRawOriginal();
+        $response = $original = $model->getRawOriginal();
+
+        if (isset(static::store()[$model])) {
+            $response = static::store()[$model];
+        } elseif ($model->isDirty() === false) {
+            // When the model is already saved without existing snapshot, original
+            // is already sync with changes and it's no longer possible to
+            // provide the diff.
+            $response = null;
+        }
 
         static::store()[$model] = $original;
 
-        return $original;
-    }
-
-    /**
-     * Get attributes diff state from a model.
-     *
-     * @api
-     *
-     * @return array<string, mixed>|null
-     */
-    public static function fetch(Model $model): ?array
-    {
-        if (! \is_null(($original = static::store()[$model] ?? null))) {
-            return $original;
-        }
-
-        return $model->isDirty() ? $model->getRawOriginal() : null;
+        return $response;
     }
 
     /**

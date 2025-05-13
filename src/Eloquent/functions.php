@@ -155,9 +155,9 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_snapshot')) {
      *
      * @api
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed>|null
      */
-    function model_snapshot(Model $model): array
+    function model_snapshot(Model $model): ?array
     {
         return Watcher::snapshot($model);
     }
@@ -181,7 +181,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
         }
 
         $original = summarize_changes(
-            array_intersect_key($model->newInstance()->setRawAttributes(Watcher::fetch($model) ?? [])->attributesToArray(), $changes),
+            array_intersect_key($model->newInstance()->setRawAttributes(Watcher::snapshot($model) ?? [])->attributesToArray(), $changes),
             hiddens: $model->getHidden(),
         );
 
