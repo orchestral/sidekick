@@ -201,8 +201,8 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\normalize_value')) {
     function normalize_value(mixed $value): mixed
     {
         $value = match (true) {
-            $value instanceof JsonSerializable => $value->jsonSerialize(),
             $value instanceof CarbonInterface => $value->toISOString(),
+            $value instanceof JsonSerializable => $value->jsonSerialize(),
             $value instanceof BackedEnum => $value->value,
             default => $value,
         };
