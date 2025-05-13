@@ -3,6 +3,7 @@
 namespace Orchestra\Sidekick\Eloquent;
 
 use BackedEnum;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
@@ -199,13 +200,14 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\normalize_value')) {
      */
     function normalize_value(mixed $value): mixed
     {
-        if ($value instanceof JsonSerializable) {
-            $value = $value->jsonSerialize();
-        }
+        $value = match (true) {
+            $value instanceof CarbonInterface => $value->toISOString(),
+            $value instanceof JsonSerializable => $value->jsonSerialize(),
+            $value instanceof BackedEnum => $value->value,
+            default => $value,
+        };
 
-        if ($value instanceof BackedEnum) {
-            return $value->value;
-        } elseif (\is_object($value) && $value instanceof Stringable) {
+        if (\is_object($value) && $value instanceof Stringable) {
             return (string) $value;
         } elseif (\is_object($value) || \is_array($value)) {
             try {
