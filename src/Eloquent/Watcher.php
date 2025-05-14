@@ -38,8 +38,8 @@ class Watcher
         $original = $model->getRawOriginal();
 
         $response = match (true) {
-            $model->isDirty() => $original,
             isset(static::store()[$model]) => static::store()[$model],
+            $model->isDirty() => $original,
             default => null,
         };
 
