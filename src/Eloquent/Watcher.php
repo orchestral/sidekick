@@ -38,9 +38,9 @@ class Watcher
         $original = $model->getRawOriginal();
 
         $response = match (true) {
-            isset(static::store()[$model]) => static::store()[$model],
             $model->isDirty() => $original,
             method_exists($model, 'getPrevious') => $model->getPrevious(),
+            isset(static::store()[$model]) => static::store()[$model],
             default => null,
         };
 
