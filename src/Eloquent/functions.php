@@ -186,8 +186,14 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
             return [null, $changes];
         }
 
+        $previous = method_exists($model, 'getPrevious') ? $model->getPrevious() : null;
+
+        if (empty($previous)) {
+            $previous = Watcher::snapshot($model);
+        }
+
         $original = summarize_changes(
-            array_intersect_key($model->newInstance()->setRawAttributes(Watcher::snapshot($model) ?? [])->attributesToArray(), $changes),
+            array_intersect_key($model->newInstance()->setRawAttributes($previous ?? [])->attributesToArray(), $changes),
             hiddens: $model->getHidden(),
         );
 
