@@ -38,14 +38,9 @@ class Watcher
         $original = $model->getRawOriginal();
 
         $response = match (true) {
+            $model->isDirty() => $original,
             isset(static::store()[$model]) => static::store()[$model],
-
-            // When the model is already saved without existing snapshot, original
-            // is already sync with changes and it's no longer possible to
-            // provide the diff.
-            $model->isDirty() === false => null,
-
-            default => $original,
+            default => null,
         };
 
         static::store()[$model] = $original;
