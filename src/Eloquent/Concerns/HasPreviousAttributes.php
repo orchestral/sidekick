@@ -12,7 +12,7 @@ trait HasPreviousAttributes
     /**
      * The previous state of the changed model attributes.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $previous = [];
 
@@ -39,7 +39,7 @@ trait HasPreviousAttributes
     /**
      * Get the attributes that were previously original before the model was last saved.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getPrevious()
     {
