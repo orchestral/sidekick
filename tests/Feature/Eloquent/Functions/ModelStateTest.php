@@ -1,6 +1,6 @@
 <?php
 
-namespace Orchestra\Sidekick\Tests\Feature\Functions\Eloquent;
+namespace Orchestra\Sidekick\Tests\Feature\Eloquent\Functions;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Auth\User;
