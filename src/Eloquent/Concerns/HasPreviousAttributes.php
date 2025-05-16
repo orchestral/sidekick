@@ -26,9 +26,6 @@ trait HasPreviousAttributes
 
         $this->previous = array_intersect_key($this->getRawOriginal(), $this->changes);
 
-        /** @phpstan-ignore offsetAssign.valueType */
-        Watcher::store()[$this] = $this->previous;
-
         return $this;
     }
 

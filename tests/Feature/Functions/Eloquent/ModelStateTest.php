@@ -159,6 +159,7 @@ class ModelStateTest extends TestCase
         ]);
 
         $user->syncOriginal();
+        $user->syncChanges();
 
         $user->exists = true;
         $user->wasRecentlyCreated = false;
@@ -171,7 +172,7 @@ class ModelStateTest extends TestCase
 
         [$original, $changes] = model_state($user);
 
-        $this->assertSame([], array_keys($original));
+        $this->assertSame(['name', 'updated_at'], array_keys($original));
         $this->assertSame(['name', 'password', 'updated_at'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki bin Mior Khairuddin', $changes['name']);
         $this->assertSame($now->startOfSecond()->toJSON(), $changes['updated_at']);
