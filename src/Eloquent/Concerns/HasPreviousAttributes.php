@@ -2,8 +2,6 @@
 
 namespace Orchestra\Sidekick\Eloquent\Concerns;
 
-use Orchestra\Sidekick\Eloquent\Watcher;
-
 /**
  * Polyfill for Eloquent Model to get previous attributes.
  *
@@ -18,7 +16,7 @@ trait HasPreviousAttributes
      */
     protected $previous = [];
 
-    /** {@inheritdoc} */
+    /** {@inheritDoc} */
     #[\Override]
     public function syncChanges()
     {
@@ -29,7 +27,7 @@ trait HasPreviousAttributes
         return $this;
     }
 
-    /** {@inheritdoc} */
+    /** {@inheritDoc} */
     #[\Override]
     public function discardChanges()
     {
