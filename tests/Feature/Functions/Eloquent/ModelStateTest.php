@@ -159,7 +159,6 @@ class ModelStateTest extends TestCase
         ]);
 
         $user->syncOriginal();
-        $user->syncChanges();
 
         $user->exists = true;
         $user->wasRecentlyCreated = false;
