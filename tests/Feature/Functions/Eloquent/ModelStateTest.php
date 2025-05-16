@@ -7,27 +7,22 @@ use Carbon\CarbonImmutable;
 use Orchestra\Sidekick\Eloquent\Watcher;
 use Orchestra\Sidekick\SensitiveValue;
 use Orchestra\Sidekick\Tests\Concerns\InteractsWithDatabase;
-use PHPUnit\Framework\TestCase;
+use Orchestra\Testbench\Attributes\WithConfig;
+use Orchestra\Testbench\TestCase;
 
 use function Orchestra\Sidekick\Eloquent\model_snapshot;
 use function Orchestra\Sidekick\Eloquent\model_state;
 
+#[WithConfig('db.default', 'testing')]
 class ModelStateTest extends TestCase
 {
-    use InteractsWithDatabase;
-
-    /** {@inheritDoc} */
-    #[\Override]
-    protected function setUp(): void
-    {
-        $this->setUpTestEnvironmentForDatabase();
-    }
-
     /** {@inheritDoc} */
     #[\Override]
     protected function tearDown(): void
     {
         Watcher::flushState();
+
+        parent::tearDown();
     }
 
     /** {@inheritDoc} */

@@ -6,21 +6,14 @@ use App\Models\User;
 use Carbon\CarbonImmutable;
 use Orchestra\Sidekick\SensitiveValue;
 use Orchestra\Sidekick\Tests\Concerns\InteractsWithDatabase;
-use PHPUnit\Framework\TestCase;
+use Orchestra\Testbench\Attributes\WithConfig;
+use Orchestra\Testbench\TestCase;
 
 use function Orchestra\Sidekick\Eloquent\model_diff;
 
+#[WithConfig('db.default', 'testing')]
 class ModelDiffTest extends TestCase
 {
-    use InteractsWithDatabase;
-
-    /** {@inheritDoc} */
-    #[\Override]
-    protected function setUp(): void
-    {
-        $this->setUpTestEnvironmentForDatabase();
-    }
-
     /** {@inheritDoc} */
     protected function createDatabaseSchema($schema): void
     {
