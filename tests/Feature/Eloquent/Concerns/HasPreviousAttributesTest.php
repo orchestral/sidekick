@@ -32,8 +32,6 @@ class HasPreviousAttributesTest extends TestCase
 
     public function test_it_can_capture_previous_on_updated_model()
     {
-        Carbon::setTestNow();
-
         UserFactory::new()->create([
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
@@ -45,7 +43,9 @@ class HasPreviousAttributesTest extends TestCase
         $user->name = 'Mior Muhammad Zaki bin Mior Khairuddin';
         $user->password = $newPassword = password_hash('password', PASSWORD_DEFAULT);
 
-        $user->save();
+        $user->withoutTimestamps(function () use ($user) {
+            $user->save();
+        });
 
         $this->assertSame(['name' => 'Mior Muhammad Zaki', 'password' => $password], $user->getPrevious());
         $this->assertSame(['name' => 'Mior Muhammad Zaki bin Mior Khairuddin', 'password' => $newPassword], $user->getChanges());
