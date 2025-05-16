@@ -5,6 +5,9 @@ namespace Orchestra\Sidekick\Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use WeakMap;
 
+/**
+ * @internal
+ */
 class Watcher
 {
     /**
@@ -32,16 +35,13 @@ class Watcher
      */
     public static function snapshot(Model $model): ?array
     {
-        $response = $original = $model->getRawOriginal();
+        $original = $model->getRawOriginal();
 
-        if (isset(static::store()[$model])) {
-            $response = static::store()[$model];
-        } elseif ($model->isDirty() === false) {
-            // When the model is already saved without existing snapshot, original
-            // is already sync with changes and it's no longer possible to
-            // provide the diff.
-            $response = null;
-        }
+        $response = match (true) {
+            $model->isDirty() => $original,
+            isset(static::store()[$model]) => static::store()[$model],
+            default => null,
+        };
 
         static::store()[$model] = $original;
 

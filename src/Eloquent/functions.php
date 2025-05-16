@@ -125,24 +125,22 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_diff')) {
      */
     function model_diff(Model $model, array $excludes = [], bool $withTimestamps = true): array
     {
-        $copy = clone $model;
         $hiddens = $model->getHidden();
-
         $timestamps = [$model->getCreatedAtColumn(), $model->getUpdatedAtColumn()];
 
-        $copy->setHidden($excludes);
-
         if (! model_exists($model) || $model->wasRecentlyCreated == true) {
+            $changes = $model->newInstance()->setHidden($excludes)->setRawAttributes($model->getAttributes())->attributesToArray();
+
             return Arr::except(
-                summarize_changes($copy->attributesToArray(), hiddens: $hiddens),
+                summarize_changes($changes, hiddens: $hiddens),
                 $withTimestamps === false ? $timestamps : [$model->getUpdatedAtColumn()]
             );
         }
 
-        $rawChanges = $copy->isDirty() ? $copy->getDirty() : $copy->getChanges();
+        $rawChanges = $model->isDirty() ? $model->getDirty() : $model->getChanges();
 
         $changes = array_intersect_key(
-            $copy->newInstance()->setHidden($excludes)->setRawAttributes($rawChanges)->attributesToArray(),
+            $model->newInstance()->setHidden($excludes)->setRawAttributes($rawChanges)->attributesToArray(),
             $rawChanges
         );
 
@@ -184,8 +182,14 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
             return [null, $changes];
         }
 
+        $previous = method_exists($model, 'getPrevious') ? $model->getPrevious() : null;
+
+        if (empty($previous)) {
+            $previous = Watcher::snapshot($model);
+        }
+
         $original = summarize_changes(
-            array_intersect_key($model->newInstance()->setRawAttributes(Watcher::snapshot($model) ?? [])->attributesToArray(), $changes),
+            array_intersect_key($model->newInstance()->setRawAttributes($previous ?? [])->attributesToArray(), $changes),
             hiddens: $model->getHidden(),
         );
 
