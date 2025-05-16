@@ -7,6 +7,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\Attributes\WithConfig;
 use Orchestra\Testbench\TestCase;
+
 use function Orchestra\Sidekick\Eloquent\model_from;
 
 #[WithConfig('database.default', 'testing')]
