@@ -38,6 +38,9 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, intl, fileinfo
           coverage: none
 
+      - name: Set package version
+        run: composer config version "1.1.x-dev"
+
       - name: Install dependencies
         uses: "ramsey/composer-install@v3"
         with:
@@ -86,6 +89,9 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, intl, fileinfo
           coverage: none
 
+      - name: Set package version
+        run: composer config version "1.1.x-dev"
+
       - name: Install dependencies
         uses: "ramsey/composer-install@v3"
         with:
@@ -131,6 +137,9 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, intl, fileinfo
           coverage: none
+
+      - name: Set package version
+        run: composer config version "1.1.x-dev"
 
       - name: Install dependencies
         uses: "ramsey/composer-install@v3"
