@@ -96,7 +96,8 @@ class ModelDiffTest extends TestCase
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
             'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
-            'created_at' => $now,
+            'created_at' => $now->subMinutes(2),
+            'updated_at' => $now->subMinutes(2),
         ]);
 
         $user = User::query()->latest()->first();
@@ -108,7 +109,7 @@ class ModelDiffTest extends TestCase
 
         $changes = model_diff($user);
 
-        $this->assertSame(['name', 'password'], array_keys($changes));
+        $this->assertSame(['name', 'password', 'updated_at'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki bin Mior Khairuddin', $changes['name']);
         $this->assertInstanceOf(SensitiveValue::class, $changes['password']);
     }
