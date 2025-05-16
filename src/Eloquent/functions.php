@@ -84,6 +84,27 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_exists')) {
     }
 }
 
+if (! \function_exists('Orchestra\Sidekick\Eloquent\model_from')) {
+    /**
+     * Check whether given $model exists.
+     *
+     * @api
+     *
+     * @param  \Illuminate\Database\Eloquent\Model|class-string<\Illuminate\Database\Eloquent\Model>  $model
+     * @param  array<string, mixed>  $attributes
+     */
+    function model_from(Model|string $model, array $attributes): Model
+    {
+        return $model::unguarded(function () use ($model, $attributes) {
+            if (\is_string($model)) {
+                $model = new $model;
+            }
+
+            return $model->newInstance()->setRawAttributes($attributes);
+        });
+    }
+}
+
 if (! \function_exists('Orchestra\Sidekick\Eloquent\model_key_type')) {
     /**
      * Check whether given $model key type.
@@ -131,7 +152,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_diff')) {
         $timestamps = [$model->getCreatedAtColumn(), $model->getUpdatedAtColumn()];
 
         if (! model_exists($model) || $model->wasRecentlyCreated == true) {
-            $changes = $model->newInstance()->setHidden($excludes)->setRawAttributes($model->getAttributes())->attributesToArray();
+            $changes = model_from($model, $model->getAttributes())->setHidden($excludes)->attributesToArray();
 
             return Arr::except(
                 summarize_changes($changes, hiddens: $hiddens),
@@ -142,7 +163,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_diff')) {
         $rawChanges = $model->isDirty() ? $model->getDirty() : $model->getChanges();
 
         $changes = array_intersect_key(
-            $model->newInstance()->setHidden($excludes)->setRawAttributes($rawChanges)->attributesToArray(),
+            model_from($model, $model->getAttributes())->setHidden($rawChanges)->attributesToArray(),
             $rawChanges
         );
 
@@ -191,7 +212,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
         }
 
         $original = summarize_changes(
-            array_intersect_key($model->newInstance()->setRawAttributes($previous ?? [])->attributesToArray(), $changes),
+            array_intersect_key(model_from($model, $previous ?? [])->attributesToArray(), $changes),
             hiddens: $model->getHidden(),
         );
 
