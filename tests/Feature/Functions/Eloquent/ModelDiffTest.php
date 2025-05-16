@@ -4,20 +4,19 @@ namespace Orchestra\Sidekick\Tests\Feature\Functions\Eloquent;
 
 use App\Models\User;
 use Carbon\CarbonImmutable;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Sidekick\SensitiveValue;
 use Orchestra\Testbench\Attributes\WithConfig;
+use Orchestra\Testbench\Attributes\WithMigration;
 use Orchestra\Testbench\TestCase;
 
 use function Orchestra\Sidekick\Eloquent\model_diff;
 
 #[WithConfig('db.default', 'testing')]
+#[WithMigration]
 class ModelDiffTest extends TestCase
 {
-    /** {@inheritDoc} */
-    protected function createDatabaseSchema($schema): void
-    {
-        //
-    }
+    use RefreshDatabase;
 
     public function test_it_can_detect_changes_on_creating_a_model()
     {
@@ -52,13 +51,11 @@ class ModelDiffTest extends TestCase
             'updated_at' => $now,
         ]);
 
-        $user->syncOriginal();
-        $user->exists = true;
-        $user->wasRecentlyCreated = true;
+        $user->save();
 
         $changes = model_diff($user);
 
-        $this->assertSame(['name', 'email', 'password', 'created_at'], array_keys($changes));
+        $this->assertSame(['name', 'email', 'password', 'created_at', 'id'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki', $changes['name']);
         $this->assertSame('crynobone@gmail.com', $changes['email']);
         $this->assertSame($now->startOfSecond()->toJSON(), $changes['created_at']);
