@@ -1,37 +1,29 @@
 <?php
 
-namespace Orchestra\Sidekick\Tests\Feature\Functions\Eloquent;
+namespace Orchestra\Sidekick\Tests\Feature\Eloquent\Functions;
 
 use App\Models\User;
 use Carbon\CarbonImmutable;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Sidekick\SensitiveValue;
-use Orchestra\Sidekick\Tests\Concerns\InteractsWithDatabase;
-use PHPUnit\Framework\TestCase;
+use Orchestra\Testbench\Attributes\WithConfig;
+use Orchestra\Testbench\Attributes\WithMigration;
+use Orchestra\Testbench\Factories\UserFactory;
+use Orchestra\Testbench\TestCase;
 
 use function Orchestra\Sidekick\Eloquent\model_diff;
 
+#[WithConfig('database.default', 'testing')]
+#[WithMigration]
 class ModelDiffTest extends TestCase
 {
-    use InteractsWithDatabase;
-
-    /** {@inheritDoc} */
-    #[\Override]
-    protected function setUp(): void
-    {
-        $this->setUpTestEnvironmentForDatabase();
-    }
-
-    /** {@inheritDoc} */
-    protected function createDatabaseSchema($schema): void
-    {
-        //
-    }
+    use RefreshDatabase;
 
     public function test_it_can_detect_changes_on_creating_a_model()
     {
         $now = CarbonImmutable::now();
 
-        $user = (new User)->forceFill([
+        $user = $this->newUserModel()->forceFill([
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
             'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
@@ -52,7 +44,7 @@ class ModelDiffTest extends TestCase
     {
         $now = CarbonImmutable::now();
 
-        $user = (new User)->forceFill([
+        $user = $this->newUserModel()->forceFill([
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
             'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
@@ -60,13 +52,11 @@ class ModelDiffTest extends TestCase
             'updated_at' => $now,
         ]);
 
-        $user->syncOriginal();
-        $user->exists = true;
-        $user->wasRecentlyCreated = true;
+        $user->save();
 
         $changes = model_diff($user);
 
-        $this->assertSame(['name', 'email', 'password', 'created_at'], array_keys($changes));
+        $this->assertSame(['name', 'email', 'password', 'created_at', 'id'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki', $changes['name']);
         $this->assertSame('crynobone@gmail.com', $changes['email']);
         $this->assertSame($now->startOfSecond()->toJSON(), $changes['created_at']);
@@ -77,17 +67,16 @@ class ModelDiffTest extends TestCase
     {
         $now = CarbonImmutable::now();
 
-        $user = (new User)->forceFill([
+        UserFactory::new()->create([
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
             'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
-            'created_at' => $now,
+            'created_at' => $now->subMinutes(2),
+            'updated_at' => $now->subMinutes(2),
         ]);
 
-        $user->syncOriginal();
+        $user = User::query()->latest()->first();
 
-        $user->exists = true;
-        $user->wasRecentlyCreated = false;
         $user->name = 'Mior Muhammad Zaki bin Mior Khairuddin';
         $user->password = password_hash('password', PASSWORD_DEFAULT);
         $user->updated_at = $now;
@@ -103,23 +92,20 @@ class ModelDiffTest extends TestCase
     {
         $now = CarbonImmutable::now();
 
-        $user = (new User)->forceFill([
+        UserFactory::new()->create([
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
             'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
-            'created_at' => $now,
+            'created_at' => $now->subMinutes(2),
+            'updated_at' => $now->subMinutes(2),
         ]);
 
-        $user->syncOriginal();
+        $user = User::query()->latest()->first();
 
-        $user->exists = true;
-        $user->wasRecentlyCreated = false;
         $user->name = 'Mior Muhammad Zaki bin Mior Khairuddin';
         $user->password = password_hash('password', PASSWORD_DEFAULT);
-        $user->updated_at = $now;
 
-        $user->syncChanges();
-        $user->syncOriginal();
+        $user->save();
 
         $changes = model_diff($user);
 
@@ -132,7 +118,7 @@ class ModelDiffTest extends TestCase
     {
         $now = CarbonImmutable::now();
 
-        $user = (new User)->forceFill([
+        $user = $this->newUserModel()->forceFill([
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
             'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
@@ -152,17 +138,16 @@ class ModelDiffTest extends TestCase
     {
         $now = CarbonImmutable::now();
 
-        $user = (new User([
+        UserFactory::new()->create([
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
             'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
             'created_at' => $now,
             'updated_at' => $now,
-        ]));
+        ]);
 
-        $user->syncOriginal();
+        $user = User::query()->latest()->first();
 
-        $user->exists = true;
         $user->name = 'Mior Muhammad Zaki bin Mior Khairuddin';
         $user->password = password_hash('password', PASSWORD_DEFAULT);
         $user->updateTimestamps();
@@ -178,18 +163,24 @@ class ModelDiffTest extends TestCase
     {
         $now = CarbonImmutable::now();
 
-        $user = (new User)->forceFill([
+        $user = $this->newUserModel()->forceFill([
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
-            'password' => $password = password_hash('secret', PASSWORD_DEFAULT),
             'created_at' => $now,
             'updated_at' => $now,
         ]);
 
-        $changes = model_diff($user, ['password'], false);
+        $changes = model_diff($user, ['email'], false);
 
-        $this->assertSame(['name', 'email'], array_keys($changes));
+        $this->assertSame(['name'], array_keys($changes));
         $this->assertSame('Mior Muhammad Zaki', $changes['name']);
-        $this->assertSame('crynobone@gmail.com', $changes['email']);
+    }
+
+    /**
+     * Create an instance of user model.
+     */
+    protected function newUserModel()
+    {
+        return (new User)->setHidden(['password']);
     }
 }

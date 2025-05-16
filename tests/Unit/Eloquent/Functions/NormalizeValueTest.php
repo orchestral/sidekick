@@ -1,6 +1,6 @@
 <?php
 
-namespace Orchestra\Sidekick\Tests\Unit\Functions\Eloquent;
+namespace Orchestra\Sidekick\Tests\Unit\Eloquent\Functions;
 
 use App\Enums\TestBackedEnum;
 use App\Enums\TestStringBackedEnum;
