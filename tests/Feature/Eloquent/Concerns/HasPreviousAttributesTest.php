@@ -5,6 +5,7 @@ namespace Orchestra\Sidekick\Tests\Feature\Eloquent\Concerns;
 use App\Models\User;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Orchestra\Testbench\Attributes\WithConfig;
 use Orchestra\Testbench\Attributes\WithMigration;
 use Orchestra\Testbench\TestCase;
@@ -31,6 +32,8 @@ class HasPreviousAttributesTest extends TestCase
 
     public function test_it_can_capture_previous_on_updated_model()
     {
+        Carbon::setTestNow();
+
         UserFactory::new()->create([
             'name' => 'Mior Muhammad Zaki',
             'email' => 'crynobone@gmail.com',
