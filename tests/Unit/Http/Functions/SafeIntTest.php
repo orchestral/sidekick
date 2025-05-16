@@ -1,6 +1,6 @@
 <?php
 
-namespace Orchestra\Sidekick\Tests\Unit\Functions\Http;
+namespace Orchestra\Sidekick\Tests\Unit\Http\Functions;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
