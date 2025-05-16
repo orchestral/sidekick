@@ -13,7 +13,7 @@ use Orchestra\Testbench\TestCase;
 
 use function Orchestra\Sidekick\Eloquent\model_diff;
 
-#[WithConfig('db.default', 'testing')]
+#[WithConfig('database.default', 'testing')]
 #[WithMigration]
 class ModelDiffTest extends TestCase
 {

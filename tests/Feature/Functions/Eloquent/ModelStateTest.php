@@ -15,7 +15,7 @@ use Orchestra\Testbench\TestCase;
 use function Orchestra\Sidekick\Eloquent\model_snapshot;
 use function Orchestra\Sidekick\Eloquent\model_state;
 
-#[WithConfig('db.default', 'testing')]
+#[WithConfig('database.default', 'testing')]
 #[WithMigration]
 class ModelStateTest extends TestCase
 {
