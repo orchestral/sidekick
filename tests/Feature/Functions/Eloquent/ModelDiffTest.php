@@ -5,7 +5,6 @@ namespace Orchestra\Sidekick\Tests\Feature\Functions\Eloquent;
 use App\Models\User;
 use Carbon\CarbonImmutable;
 use Orchestra\Sidekick\SensitiveValue;
-use Orchestra\Sidekick\Tests\Concerns\InteractsWithDatabase;
 use Orchestra\Testbench\Attributes\WithConfig;
 use Orchestra\Testbench\TestCase;
 
