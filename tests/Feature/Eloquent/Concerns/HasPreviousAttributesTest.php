@@ -42,7 +42,9 @@ class HasPreviousAttributesTest extends TestCase
         $user->name = 'Mior Muhammad Zaki bin Mior Khairuddin';
         $user->password = $newPassword = password_hash('password', PASSWORD_DEFAULT);
 
-        $user->save();
+        $user->withoutTimestamps(function () use ($user) {
+            $user->save();
+        });
 
         $this->assertSame(['name' => 'Mior Muhammad Zaki', 'password' => $password], $user->getPrevious());
         $this->assertSame(['name' => 'Mior Muhammad Zaki bin Mior Khairuddin', 'password' => $newPassword], $user->getChanges());
