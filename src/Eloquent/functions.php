@@ -161,7 +161,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_diff')) {
         $rawChanges = $model->isDirty() ? $model->getDirty() : $model->getChanges();
 
         $changes = array_intersect_key(
-            model_from($model, $model->getAttributes())->setHidden($rawChanges)->attributesToArray(),
+            model_from($model, $rawChanges)->setHidden($excludes)->attributesToArray(),
             $rawChanges
         );
 
