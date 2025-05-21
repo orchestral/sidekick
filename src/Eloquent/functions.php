@@ -208,6 +208,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
             return [null, $changes];
         }
 
+        /** @phpstan-ignore function.alreadyNarrowedType */
         $previous = method_exists($model, 'getPrevious') ? $model->getPrevious() : null;
 
         if (empty($previous)) {

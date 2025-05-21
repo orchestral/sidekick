@@ -6,6 +6,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Orchestra\Sidekick\Eloquent\Concerns\HasPreviousAttributes;
 
+/**
+ * @property \Carbon\CarbonInterface $created_at
+ */
 class User extends Authenticatable
 {
     use HasPreviousAttributes;
