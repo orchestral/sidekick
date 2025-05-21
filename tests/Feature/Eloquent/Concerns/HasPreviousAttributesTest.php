@@ -5,10 +5,12 @@ namespace Orchestra\Sidekick\Tests\Feature\Eloquent\Concerns;
 use App\Models\User;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Orchestra\Testbench\Attributes\RequiresLaravel;
 use Orchestra\Testbench\Attributes\WithConfig;
 use Orchestra\Testbench\Attributes\WithMigration;
 use Orchestra\Testbench\TestCase;
 
+#[RequiresLaravel('<12.15.0')]
 #[WithConfig('database.default', 'testing')]
 #[WithMigration]
 class HasPreviousAttributesTest extends TestCase
