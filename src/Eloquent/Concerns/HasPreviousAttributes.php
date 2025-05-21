@@ -8,8 +8,9 @@ use function Orchestra\Sidekick\laravel_version_compare;
  * Polyfill for Eloquent Model to get previous attributes.
  *
  * @see https://github.com/laravel/framework/pull/55729
+ *
+ * @codeCoverageIgnore
  */
-
 if (laravel_version_compare('12.15.0', '>=')) {
     trait HasPreviousAttributes {
         // ...
