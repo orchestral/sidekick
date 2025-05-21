@@ -151,8 +151,10 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_diff')) {
         $hiddens = $model->getHidden();
         $timestamps = [$model->getCreatedAtColumn(), $model->getUpdatedAtColumn()];
 
-        if (! model_exists($model) || $model->wasRecentlyCreated == true) {
-            $changes = model_from($model, $model->getAttributes())->setHidden($excludes)->attributesToArray();
+        if (! model_exists($model) || $model->wasRecentlyCreated === true) {
+            $rawChanges = $model->getAttributes();
+
+            $changes = model_from($model, $rawChanges)->setHidden($excludes)->attributesToArray();
 
             return Arr::except(
                 summarize_changes($changes, hiddens: $hiddens),
