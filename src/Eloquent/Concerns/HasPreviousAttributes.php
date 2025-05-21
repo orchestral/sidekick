@@ -12,7 +12,8 @@ use function Orchestra\Sidekick\laravel_version_compare;
  * @codeCoverageIgnore
  */
 if (laravel_version_compare('12.15.0', '>=')) {
-    trait HasPreviousAttributes {
+    trait HasPreviousAttributes
+    {
         // ...
     }
 } else {
