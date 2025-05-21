@@ -149,12 +149,13 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_diff')) {
     function model_diff(Model $model, array $excludes = [], bool $withTimestamps = true): array
     {
         $hiddens = $model->getHidden();
+        $excludedAttributes = array_merge($excludes, $model->getAppends());
         $timestamps = [$model->getCreatedAtColumn(), $model->getUpdatedAtColumn()];
 
         if (! model_exists($model) || $model->wasRecentlyCreated === true) {
             $rawChanges = $model->getAttributes();
 
-            $changes = model_from($model, $rawChanges)->setHidden($excludes)->attributesToArray();
+            $changes = model_from($model, $rawChanges)->setHidden($excludedAttributes)->attributesToArray();
 
             return Arr::except(
                 summarize_changes($changes, hiddens: $hiddens),
@@ -165,7 +166,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_diff')) {
         $rawChanges = $model->isDirty() ? $model->getDirty() : $model->getChanges();
 
         $changes = array_intersect_key(
-            model_from($model, $rawChanges)->setHidden($excludes)->attributesToArray(),
+            model_from($model, $rawChanges)->setHidden($excludedAttributes)->attributesToArray(),
             $rawChanges
         );
 
@@ -207,6 +208,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
             return [null, $changes];
         }
 
+        /** @phpstan-ignore function.alreadyNarrowedType */
         $previous = method_exists($model, 'getPrevious') ? $model->getPrevious() : null;
 
         if (empty($previous)) {

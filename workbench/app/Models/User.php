@@ -6,10 +6,22 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Orchestra\Sidekick\Eloquent\Concerns\HasPreviousAttributes;
 
+/**
+ * @property \Carbon\CarbonInterface $created_at
+ */
 class User extends Authenticatable
 {
     use HasPreviousAttributes;
     use Notifiable;
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var list<string>
+     */
+    protected $appends = [
+        'created_at_friendly',
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -40,4 +52,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Return a friendly created at date.
+     */
+    public function getCreatedAtFriendlyAttribute(): string
+    {
+        return $this->created_at->format('M d, Y');
+    }
 }
