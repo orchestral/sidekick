@@ -50,8 +50,12 @@ class Env extends \Illuminate\Support\Env
      * @param  \Orchestra\Sidekick\UndefinedValue|mixed|null  $default
      * @return mixed
      */
-    public static function forward(string $key, $default = new UndefinedValue)
+    public static function forward(string $key, $default = null)
     {
+        if (\func_num_args() === 1) {
+            $default = new UndefinedValue;
+        }
+
         $value = static::get($key, $default);
 
         if ($value instanceof UndefinedValue) {
