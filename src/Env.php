@@ -9,9 +9,6 @@ class Env extends \Illuminate\Support\Env
 {
     /**
      * Determine if environmemt variable is available.
-     *
-     * @param  string  $key
-     * @return bool
      */
     public static function has(string $key): bool
     {
@@ -20,10 +17,6 @@ class Env extends \Illuminate\Support\Env
 
     /**
      * Set an environment value.
-     *
-     * @param  string  $key
-     * @param  string  $value
-     * @return void
      */
     public static function set(string $key, string $value): void
     {
@@ -33,8 +26,6 @@ class Env extends \Illuminate\Support\Env
     /**
      * Forget an environment variable.
      *
-     * @param  string  $key
-     * @return bool
      *
      * @throws \InvalidArgumentException
      */
@@ -46,7 +37,6 @@ class Env extends \Illuminate\Support\Env
     /**
      * Forward environment value.
      *
-     * @param  string  $key
      * @param  \Orchestra\Sidekick\UndefinedValue|mixed|null  $default
      * @return mixed
      */
