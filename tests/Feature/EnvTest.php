@@ -5,14 +5,10 @@ namespace Orchestra\Sidekick\Tests\Feature;
 use Orchestra\Sidekick\Env;
 use Orchestra\Testbench\Attributes\WithEnv;
 use Orchestra\Testbench\TestCase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
 
-#[Group('phpunit-configuration')]
 class EnvTest extends TestCase
 {
-    #[Test]
-    public function it_can_determined_has_env_values()
+    public function test_it_can_determined_has_env_values()
     {
         $_ENV['TESTING_TRUE_EXAMPLE'] = true;
         $_ENV['TESTING_FALSE_EXAMPLE'] = false;
@@ -32,9 +28,8 @@ class EnvTest extends TestCase
         );
     }
 
-    #[Test]
     #[WithEnv('TESTING_USING_ATTRIBUTE', '(true)')]
-    public function it_can_correctly_forward_env_values()
+    public function test_it_can_correctly_forward_env_values()
     {
         $_ENV['TESTING_TRUE_EXAMPLE'] = true;
         $_ENV['TESTING_FALSE_EXAMPLE'] = false;
