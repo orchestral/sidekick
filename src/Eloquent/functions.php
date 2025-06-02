@@ -201,6 +201,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
     function model_state(Model $model, array $excludes = [], bool $withTimestamps = true): array
     {
         $changes = model_diff($model, $excludes, $withTimestamps);
+        $excludedAttributes = array_merge($excludes, $model->getAppends());
 
         if (! model_exists($model) || $model->wasRecentlyCreated == true) {
             return [null, $changes];
@@ -214,7 +215,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
         }
 
         $original = summarize_changes(
-            array_intersect_key(model_from($model, $previous ?? [])->attributesToArray(), $changes),
+            array_intersect_key(model_from($model, $previous ?? [])->setHidden($excludedAttributes)->attributesToArray(), $changes),
             hiddens: $model->getHidden(),
         );
 
