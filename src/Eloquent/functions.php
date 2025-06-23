@@ -166,7 +166,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_diff')) {
         $rawChanges = $model->isDirty() ? $model->getDirty() : $model->getChanges();
 
         $changes = array_intersect_key(
-            model_from($model, $rawChanges)->setHidden($excludedAttributes)->attributesToArray(),
+            model_from($model, $rawChanges)->setHidden($excludedAttributes)->setAppends([])->attributesToArray(),
             $rawChanges
         );
 
@@ -217,7 +217,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\model_state')) {
         }
 
         $original = summarize_changes(
-            array_intersect_key(model_from($model, $previous ?? [])->setHidden($excludedAttributes)->attributesToArray(), $changes),
+            array_intersect_key(model_from($model, $previous ?? [])->setHidden($excludedAttributes)->setAppends([])->attributesToArray(), $changes),
             hiddens: $model->getHidden(),
         );
 
