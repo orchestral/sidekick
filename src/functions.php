@@ -156,11 +156,11 @@ if (! \function_exists('Orchestra\Sidekick\phpunit_version_compare')) {
      *
      * @template TOperator of string|null
      *
-     * @throws \RuntimeException
-     *
      * @phpstan-param  TOperator  $operator
      *
      * @phpstan-return (TOperator is null ? int : bool)
+     *
+     * @throws \RuntimeException
      *
      * @codeCoverageIgnore
      */
@@ -174,7 +174,7 @@ if (! \function_exists('Orchestra\Sidekick\phpunit_version_compare')) {
         $phpunit = transform(
             Version::id(),
             fn (string $version) => match (true) {
-                str_starts_with($version, '12.3-') => '12.3.0',
+                str_starts_with($version, '12.4-') => '12.4.0',
                 default => $version,
             }
         );
