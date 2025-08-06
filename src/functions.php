@@ -156,11 +156,11 @@ if (! \function_exists('Orchestra\Sidekick\phpunit_version_compare')) {
      *
      * @template TOperator of string|null
      *
-     * @throws \RuntimeException
-     *
      * @phpstan-param  TOperator  $operator
      *
      * @phpstan-return (TOperator is null ? int : bool)
+     *
+     * @throws \RuntimeException
      *
      * @codeCoverageIgnore
      */
