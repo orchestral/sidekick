@@ -5,6 +5,7 @@ namespace Orchestra\Sidekick;
 use BackedEnum;
 use Closure;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Arr;
 use PHPUnit\Runner\Version;
 use RuntimeException;
 use UnitEnum;
