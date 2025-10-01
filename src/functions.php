@@ -136,7 +136,7 @@ if (! \function_exists('Orchestra\Sidekick\working_path')) {
      */
     function working_path(array|string $path = ''): string
     {
-        return is_testbench_cli()
+        return is_testbench_cli() && \function_exists('Orchestra\Testbench\package_path')
             ? package_path($path)
             : base_path(join_paths(...Arr::wrap(\func_num_args() > 1 ? \func_get_args() : $path)));
     }
