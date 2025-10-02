@@ -11,7 +11,7 @@ use function Orchestra\Sidekick\is_testbench_cli;
 use function Orchestra\Testbench\remote;
 
 #[WithConfig('app.key', 'AckfSECXIvnK5r28GVIWUAxmbBSjTsmF')]
-#[CoversFunction('Orchestra\Sidekick\working_path')]
+#[CoversFunction('\Orchestra\Sidekick\is_testbench_cli')]
 class IsTestbenchCliTest extends TestCase
 {
     #[RequiresLaravel('>=11.44.7')]

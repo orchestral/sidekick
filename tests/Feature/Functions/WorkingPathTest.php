@@ -12,7 +12,7 @@ use function Orchestra\Testbench\package_path;
 use function Orchestra\Testbench\remote;
 
 #[WithConfig('app.key', 'AckfSECXIvnK5r28GVIWUAxmbBSjTsmF')]
-#[CoversFunction('Orchestra\Sidekick\working_path')]
+#[CoversFunction('\Orchestra\Sidekick\working_path')]
 class WorkingPathTest extends TestCase
 {
     #[RequiresLaravel('>=11.44.7')]
