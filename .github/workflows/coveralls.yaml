@@ -12,7 +12,7 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        php: ['8.0']
+        php: [8.2]
         experimental:
           - false
 
@@ -41,6 +41,10 @@ jobs:
       - name: Installed dependencies
         run: |
           composer show -D
+
+      - name: Update PHPUnit Configuration
+        run: |
+          vendor/bin/phpunit --migrate-configuration
 
       - name: Execute tests
         run: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
