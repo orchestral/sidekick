@@ -21,18 +21,18 @@ class IsTestbenchCliTest extends TestCase
             $result = $process->mustRun();
 
             return $result->output();
-        });
+        }));
 
         $this->assertTrue(transform(remote(fn () => is_testbench_cli(dusk: false)), function ($process) {
             $result = $process->mustRun();
 
             return $result->output();
-        });
+        }));
 
         $this->assertFalse(transform(remote(fn () => is_testbench_cli(dusk: true)), function ($process) {
             $result = $process->mustRun();
 
             return $result->output();
-        });
+        }));
     }
 }
