@@ -20,6 +20,10 @@ class WorkingPathTest extends TestCase
         $result = $process->mustRun();
 
         $this->assertSame(base_path(), working_path());
-        $this->assertSame(package_path(), $result->output());
+        $this->assertSame(package_path(), transform(remote(fn () => package_path()), function ($process) {
+            $result = $process->mustRun();
+
+            return $result->output();
+        });
     }
 }
