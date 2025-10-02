@@ -141,9 +141,16 @@ if (! \function_exists('Orchestra\Sidekick\is_testbench_cli')) {
      *
      * @api
      */
-    function is_testbench_cli(): bool
+    function is_testbench_cli(?bool $dusk = null): bool
     {
-        return \defined('TESTBENCH_CORE') === true;
+        $usingTestbench = \defined('TESTBENCH_CORE');
+        $usingTestbenchDusk = \defined('TESTBENCH_DUSK');
+
+        return match ($dusk) {
+            false => $usingTestbench === true && $usingTestbenchDusk === false,
+            true => $usingTestbench === true && $usingTestbenchDusk === true,
+            default => $usingTestbench === true,
+        };
     }
 }
 
