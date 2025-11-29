@@ -164,13 +164,16 @@ if (! \function_exists('Orchestra\Sidekick\laravel_normalize_version')) {
             throw new RuntimeException('Unable to verify Laravel Framework version');
         }
 
-        return transform(
+        /** @var string $version */
+        $version = transform(
             Application::VERSION,
             fn (string $version) => match ($version) {
                 '13.x-dev' => '13.0.0',
                 default => $version,
             }
         );
+
+        return (new VersionParser)->normalize($version);
     }
 }
 
@@ -188,13 +191,16 @@ if (! \function_exists('Orchestra\Sidekick\phpunit_normalize_version')) {
             throw new RuntimeException('Unable to verify PHPUnit version');
         }
 
-        return transform(
+        /** @var string $version */
+        $version = transform(
             Version::id(),
             fn (string $version) => match (true) {
                 str_starts_with($version, '12.4-') => '12.4.0',
                 default => $version,
             }
         );
+
+        return (new VersionParser)->normalize($version);
     }
 }
 
@@ -222,7 +228,7 @@ if (! \function_exists('Orchestra\Sidekick\laravel_version_compare')) {
 
         $versionParser = new VersionParser;
 
-        $laravel = $versionParser->normalize(laravel_normalize_version());
+        $laravel = laravel_normalize_version();
         $version = $versionParser->normalize($version);
 
         if (\is_null($operator)) {
@@ -251,9 +257,15 @@ if (! \function_exists('Orchestra\Sidekick\package_version_compare')) {
      */
     function package_version_compare(string $package, string $version, ?string $operator = null): int|bool
     {
+        $prettyVersion = InstalledVersions::getPrettyVersion($package);
+
+        if (\is_null($prettyVersion)) {
+            throw new RuntimeException(\sprintf("Unable to verify '%s' version", $package));
+        }
+
         $versionParser = new VersionParser;
 
-        $package = $versionParser->normalize(InstalledVersions::getPrettyVersion($package));
+        $package = $versionParser->normalize($prettyVersion);
         $version = $versionParser->normalize($version);
 
         if (\is_null($operator)) {
@@ -288,10 +300,8 @@ if (! \function_exists('Orchestra\Sidekick\phpunit_version_compare')) {
             throw new RuntimeException('Unable to verify PHPUnit version');
         }
 
-        $versionParser = new VersionParser;
-
-        $phpunit = $versionParser->normalize(phpunit_normalize_version());
-        $version = $versionParser->normalize($version);
+        $phpunit = phpunit_normalize_version();
+        $version = (new VersionParser)->normalize($version);
 
         if (\is_null($operator)) {
             return version_compare($phpunit, $version);
