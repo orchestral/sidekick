@@ -2,8 +2,8 @@
 
 namespace Orchestra\Sidekick\Tests\Unit\Functions;
 
-use PHPUnit\Framework\TestCase;
 use OutOfBoundsException;
+use PHPUnit\Framework\TestCase;
 
 use function Orchestra\Sidekick\package_version_compare;
 use function Orchestra\Sidekick\phpunit_normalize_version;
