@@ -3,6 +3,8 @@
 namespace Orchestra\Sidekick;
 
 use Closure;
+use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Arr;
 use PHPUnit\Runner\Version;
@@ -148,6 +150,60 @@ if (! \function_exists('Orchestra\Sidekick\working_path')) {
     }
 }
 
+if (! \function_exists('Orchestra\Sidekick\laravel_normalize_version')) {
+    /**
+     * Laravel normalize version.
+     *
+     * @api
+     *
+     * @throws \RuntimeException
+     */
+    function laravel_normalize_version(): string
+    {
+        if (! class_exists(Application::class)) {
+            throw new RuntimeException('Unable to verify Laravel Framework version');
+        }
+
+        /** @var string $version */
+        $version = transform(
+            Application::VERSION,
+            fn (string $version) => match ($version) {
+                '13.x-dev' => '13.0.0',
+                default => $version,
+            }
+        );
+
+        return (new VersionParser)->normalize($version);
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\phpunit_normalize_version')) {
+    /**
+     * PHPUnit normalize version.
+     *
+     * @api
+     *
+     * @throws \RuntimeException
+     */
+    function phpunit_normalize_version(): string
+    {
+        if (! class_exists(Version::class)) {
+            throw new RuntimeException('Unable to verify PHPUnit version');
+        }
+
+        /** @var string $version */
+        $version = transform(
+            Version::id(),
+            fn (string $version) => match (true) {
+                str_starts_with($version, '12.4-') => '12.4.0',
+                default => $version,
+            }
+        );
+
+        return (new VersionParser)->normalize($version);
+    }
+}
+
 if (! \function_exists('Orchestra\Sidekick\laravel_version_compare')) {
     /**
      * Laravel version compare.
@@ -160,6 +216,8 @@ if (! \function_exists('Orchestra\Sidekick\laravel_version_compare')) {
      *
      * @phpstan-return (TOperator is null ? int : bool)
      *
+     * @throws \RuntimeException
+     *
      * @codeCoverageIgnore
      */
     function laravel_version_compare(string $version, ?string $operator = null): int|bool
@@ -168,20 +226,55 @@ if (! \function_exists('Orchestra\Sidekick\laravel_version_compare')) {
             throw new RuntimeException('Unable to verify Laravel Framework version');
         }
 
-        /** @var string $laravel */
-        $laravel = transform(
-            Application::VERSION,
-            fn (string $version) => match ($version) {
-                '13.x-dev' => '13.0.0',
-                default => $version,
-            }
-        );
+        $versionParser = new VersionParser;
+
+        $laravel = laravel_normalize_version();
+        $version = $versionParser->normalize($version);
 
         if (\is_null($operator)) {
             return version_compare($laravel, $version);
         }
 
         return version_compare($laravel, $version, $operator);
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\package_version_compare')) {
+    /**
+     * Package version compare.
+     *
+     * @api
+     *
+     * @template TOperator of string|null
+     *
+     * @phpstan-param  TOperator  $operator
+     *
+     * @phpstan-return (TOperator is null ? int : bool)
+     *
+     * @throws \RuntimeException
+     *
+     * @codeCoverageIgnore
+     */
+    function package_version_compare(string $package, string $version, ?string $operator = null): int|bool
+    {
+        $prettyVersion = InstalledVersions::getPrettyVersion($package);
+
+        if (\is_null($prettyVersion)) {
+            throw new RuntimeException(\sprintf("Unable to verify '%s' version", $package));
+        }
+
+        $versionParser = new VersionParser;
+
+        $package = $versionParser->normalize($prettyVersion);
+        $version = $versionParser->normalize($version);
+
+        if (\is_null($operator)) {
+            return version_compare($package, $version);
+        } elseif ($operator === '=') {
+
+        }
+
+        return version_compare($package, $version, $operator);
     }
 }
 
@@ -207,14 +300,8 @@ if (! \function_exists('Orchestra\Sidekick\phpunit_version_compare')) {
             throw new RuntimeException('Unable to verify PHPUnit version');
         }
 
-        /** @var string $phpunit */
-        $phpunit = transform(
-            Version::id(),
-            fn (string $version) => match (true) {
-                str_starts_with($version, '12.4-') => '12.4.0',
-                default => $version,
-            }
-        );
+        $phpunit = phpunit_normalize_version();
+        $version = (new VersionParser)->normalize($version);
 
         if (\is_null($operator)) {
             return version_compare($phpunit, $version);
