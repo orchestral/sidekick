@@ -270,8 +270,6 @@ if (! \function_exists('Orchestra\Sidekick\package_version_compare')) {
 
         if (\is_null($operator)) {
             return version_compare($package, $version);
-        } elseif ($operator === '=') {
-
         }
 
         return version_compare($package, $version, $operator);
