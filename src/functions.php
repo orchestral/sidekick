@@ -219,7 +219,7 @@ if (! \function_exists('Orchestra\Sidekick\phpunit_normalize_version')) {
         $version = transform(
             Version::id(),
             fn (string $version) => match (true) {
-                str_starts_with($version, '12.4-') => '12.4.0',
+                str_starts_with($version, '13.0-') => '13.0.0',
                 default => $version,
             }
         );
