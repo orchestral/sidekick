@@ -251,9 +251,8 @@ if (! \function_exists('Orchestra\Sidekick\laravel_version_compare')) {
      *
      * @template TOperator of string|null
      *
-     * @phpstan-param  TOperator  $operator
-     *
-     * @phpstan-return (TOperator is null ? int : bool)
+     * @param  TOperator  $operator
+     * @return (TOperator is null ? int : bool)
      *
      * @throws \RuntimeException
      *
@@ -322,9 +321,8 @@ if (! \function_exists('Orchestra\Sidekick\phpunit_version_compare')) {
      *
      * @template TOperator of string|null
      *
-     * @phpstan-param  TOperator  $operator
-     *
-     * @phpstan-return (TOperator is null ? int : bool)
+     * @param  TOperator  $operator
+     * @return (TOperator is null ? int : bool)
      *
      * @throws \OutOfBoundsException
      * @throws \RuntimeException

@@ -262,7 +262,7 @@ if (! \function_exists('Orchestra\Sidekick\Eloquent\summarize_changes')) {
      *
      * @param  array<string, mixed>  $changes
      * @param  array<int, string>  $hiddens
-     * @return array<string, \Orchestra\Sidekick\SensitiveValue|scalar>
+     * @return array<string, \Orchestra\Sidekick\SensitiveValue<mixed>|scalar>
      */
     function summarize_changes(array $changes, array $hiddens = []): array
     {

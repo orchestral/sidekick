@@ -7,11 +7,15 @@ use Stringable;
 
 /**
  * @api
+ *
+ * @template TValue of mixed
  */
 final class SensitiveValue implements JsonSerializable, Stringable
 {
     /**
      * Construct a new sensitive value.
+     *
+     * @param  TValue  $value
      */
     public function __construct(
         private readonly mixed $value
@@ -21,6 +25,8 @@ final class SensitiveValue implements JsonSerializable, Stringable
 
     /**
      * Get the original value.
+     *
+     * @return TValue
      */
     public function getValue(): mixed
     {
