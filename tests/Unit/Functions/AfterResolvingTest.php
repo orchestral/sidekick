@@ -34,4 +34,29 @@ class AfterResolvingTest extends TestCase
 
         Testbench::flushState($this);
     }
+
+    public function test_it_define_after_resolving_action_when_instance_has_been_resolved()
+    {
+        $tester = (object) [
+            'expected' => null,
+        ];
+
+        $laravel = Testbench::create();
+
+        $laravel->bind('sidekick.secret', function () {
+            return new SensitiveValue('laravel!');
+        });
+
+        $laravel->make('sidekick.secret');
+
+        after_resolving($laravel, 'sidekick.secret', function ($object) use (&$tester) {
+            $this->assertInstanceOf(SensitiveValue::class, $object);
+
+            $tester->expected = $object->getValue();
+        });
+
+        $this->assertSame('laravel!', $tester->expected);
+
+        Testbench::flushState($this);
+    }
 }
