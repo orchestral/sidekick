@@ -40,5 +40,7 @@ class FilenameFromClassnameTest extends TestCase
             join_paths($this->projectDirectory, 'src', 'UndefinedValue.php'),
             filename_from_classname('Orchestra\Sidekick\UndefinedValue')
         );
+
+        $this->assertFalse(filename_from_classname('Orchestra\Sidekick\DefinedValue'));
     }
 }
