@@ -14,13 +14,16 @@ if (! \function_exists('Orchestra\Sidekick\Filesystem\filename_from_classname'))
      */
     function filename_from_classname(string $className): string|false
     {
-        if (! \class_exists($className, false)) {
+        if (! class_exists($className, false)) {
             return false;
         }
 
-        $reflection = new ReflectionClass($className);
+        $classFileName = (new ReflectionClass($className))->getFileName();
 
-        if (! is_file($classFileName = $reflection->getFileName()) && ! str_ends_with(strtolower($classFileName), '.php')) {
+        if (
+            $classFileName === false
+            || (! is_file($classFileName) && ! str_ends_with(strtolower($classFileName), '.php'))
+        ) {
             return false;
         }
 
