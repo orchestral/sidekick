@@ -6,6 +6,7 @@ use BackedEnum;
 use Closure;
 use Composer\InstalledVersions;
 use Composer\Semver\VersionParser;
+use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Arr;
 use OutOfBoundsException;
@@ -50,6 +51,28 @@ if (! \function_exists('Orchestra\Sidekick\enum_value')) {
 
             default => $value ?? value($default),
         };
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\after_resolving')) {
+    /**
+     * Register after resolving callback.
+     *
+     * @api
+     *
+     * @template TLaravel of \Illuminate\Contracts\Foundation\Application
+     *
+     * @param  TLaravel  $app
+     * @param  class-string|string  $name
+     * @param  (\Closure(object, TLaravel):(mixed))|null  $callback
+     */
+    function after_resolving(ApplicationContract $app, string $name, ?Closure $callback = null): void
+    {
+        $app->afterResolving($name, $callback);
+
+        if ($app->resolved($name)) {
+            value($callback, $app->make($name), $app);
+        }
     }
 }
 
