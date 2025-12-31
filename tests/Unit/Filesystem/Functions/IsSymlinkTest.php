@@ -1,10 +1,10 @@
 <?php
 
-namespace Orchestra\Sidekick\Tests\Unit\Functions;
+namespace Orchestra\Sidekick\Tests\Unit\Filesystem\Functions;
 
 use PHPUnit\Framework\TestCase;
 
-use function Orchestra\Sidekick\is_symlink;
+use function Orchestra\Sidekick\Filesystem\is_symlink;
 
 class IsSymlinkTest extends TestCase
 {
