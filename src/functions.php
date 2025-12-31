@@ -82,6 +82,7 @@ if (! \function_exists('Orchestra\Sidekick\join_paths')) {
      * Join the given paths together.
      *
      * @api
+     *
      * @deprecated
      */
     function join_paths(?string $basePath, string ...$paths): string
@@ -142,6 +143,7 @@ if (! \function_exists('Orchestra\Sidekick\is_symlink')) {
      * Determine if the path is a symlink for both Unix and Windows environments.
      *
      * @api
+     *
      * @deprecated
      */
     function is_symlink(string $path): bool
