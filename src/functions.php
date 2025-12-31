@@ -319,7 +319,9 @@ if (! \function_exists('Orchestra\Sidekick\package_version_compare')) {
     {
         $prettyVersion = InstalledVersions::getPrettyVersion($package);
 
-        if (\is_null($prettyVersion)) {
+        if (str_starts_with($prettyVersion, 'dev-')) {
+            throw new RuntimeException(\sprintf('Unable to compare "%s:%s" version', $package, $prettyVersion));
+        } elseif (\is_null($prettyVersion)) {
             throw new RuntimeException(\sprintf('Unable to compare "%s" version', $package));
         }
 

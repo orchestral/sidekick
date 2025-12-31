@@ -2,7 +2,9 @@
 
 namespace Orchestra\Sidekick\Tests\Unit\Functions;
 
+use Composer\InstalledVersions;
 use OutOfBoundsException;
+use PHPUnit\Framework\Attributes\RequiresPhpunit;
 use PHPUnit\Framework\TestCase;
 
 use function Orchestra\Sidekick\package_version_compare;
@@ -10,8 +12,13 @@ use function Orchestra\Sidekick\phpunit_normalize_version;
 
 class PackageVersionCompareTest extends TestCase
 {
+    #[RequiresPhpunit('<13.0.0')]
     public function test_it_can_evaluate_package_version()
     {
+        if (str_starts_with(InstalledVersions::getPrettyVersion('phpunit/phpunit'), 'dev-')) {
+            $this->markTestSkipped('Unable to retrieved correct `phpunit/phpunit` version from Composer');
+        }
+
         $this->assertTrue(package_version_compare('phpunit/phpunit', phpunit_normalize_version(), '='));
     }
 
