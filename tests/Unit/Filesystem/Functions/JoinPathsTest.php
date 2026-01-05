@@ -4,7 +4,7 @@ namespace Orchestra\Sidekick\Tests\Unit\Functions;
 
 use PHPUnit\Framework\TestCase;
 
-use function Orchestra\Sidekick\join_paths;
+use function Orchestra\Sidekick\Filesystem\join_paths;
 
 class JoinPathsTest extends TestCase
 {
