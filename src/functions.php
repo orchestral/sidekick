@@ -77,22 +77,17 @@ if (! \function_exists('Orchestra\Sidekick\after_resolving')) {
 }
 
 if (! \function_exists('Orchestra\Sidekick\join_paths')) {
+
     /**
      * Join the given paths together.
      *
      * @api
+     *
+     * @deprecated
      */
     function join_paths(?string $basePath, string ...$paths): string
     {
-        foreach ($paths as $index => $path) {
-            if (empty($path) && $path !== '0') {
-                unset($paths[$index]);
-            } else {
-                $paths[$index] = DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR);
-            }
-        }
-
-        return $basePath.implode('', $paths);
+        return Filesystem\join_paths($basePath, ...$paths);
     }
 }
 
@@ -148,16 +143,12 @@ if (! \function_exists('Orchestra\Sidekick\is_symlink')) {
      * Determine if the path is a symlink for both Unix and Windows environments.
      *
      * @api
+     *
+     * @deprecated
      */
     function is_symlink(string $path): bool
     {
-        if (windows_os() && is_dir($path) && readlink($path) !== $path) {
-            return true;
-        } elseif (is_link($path)) {
-            return true;
-        }
-
-        return false;
+        return Filesystem\is_symlink($path);
     }
 }
 
