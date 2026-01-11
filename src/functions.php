@@ -147,6 +147,28 @@ if (! \function_exists('Orchestra\Sidekick\transform_relative_path')) {
     }
 }
 
+if (! \function_exists('Orchestra\Sidekick\package_path')) {
+    /**
+     * Get the package path.
+     *
+     * @api
+     *
+     * @no-named-arguments
+     *
+     * @param  array<int, string|null>|string  ...$path
+     */
+    function package_path(array|string $path = ''): string
+    {
+        $packagePath = once(fn () => match (true) {
+            \defined('TESTBENCH_WORKING_PATH') => TESTBENCH_WORKING_PATH,
+            \is_string(getenv('TESTBENCH_WORKING_PATH')) => getenv('TESTBENCH_WORKING_PATH'),
+            default => realpath(InstalledVersions::getRootPackage()['install_path']),
+        });
+
+        return join_paths($packagePath(), ...Arr::wrap(\func_num_args() > 1 ? \func_get_args() : $path));
+    }
+}
+
 if (! \function_exists('Orchestra\Sidekick\working_path')) {
     /**
      * Get the working path.
@@ -159,8 +181,8 @@ if (! \function_exists('Orchestra\Sidekick\working_path')) {
      */
     function working_path(array|string $path = ''): string
     {
-        return is_testbench_cli() && \function_exists('Orchestra\Testbench\package_path')
-            ? \Orchestra\Testbench\package_path($path)
+        return is_testbench_cli()
+            ? package_path($path)
             : base_path(join_paths(...Arr::wrap(\func_num_args() > 1 ? \func_get_args() : $path)));
     }
 }
