@@ -159,13 +159,13 @@ if (! \function_exists('Orchestra\Sidekick\package_path')) {
      */
     function package_path(array|string $path = ''): string
     {
-        static $PACKAGE_PATH = match (true) {
+        $packagePath = once(fn () => match (true) {
             \defined('TESTBENCH_WORKING_PATH') => TESTBENCH_WORKING_PATH,
             \is_string(getenv('TESTBENCH_WORKING_PATH')) => getenv('TESTBENCH_WORKING_PATH'),
             default => realpath(InstalledVersions::getRootPackage()['install_path']),
-        };
+        });
 
-        return join_paths($PACKAGE_PATH, ...Arr::wrap(\func_num_args() > 1 ? \func_get_args() : $path));
+        return join_paths($packagePath(), ...Arr::wrap(\func_num_args() > 1 ? \func_get_args() : $path));
     }
 }
 
