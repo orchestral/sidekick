@@ -197,10 +197,14 @@ if (! \function_exists('Orchestra\Sidekick\package_path')) {
      */
     function package_path(array|string $path = ''): string
     {
-        $packagePath = once(fn () => match (true) {
-            \defined('TESTBENCH_WORKING_PATH') => TESTBENCH_WORKING_PATH,
-            \is_string(getenv('TESTBENCH_WORKING_PATH')) => getenv('TESTBENCH_WORKING_PATH'),
-            default => realpath(InstalledVersions::getRootPackage()['install_path']),
+        $packagePath = once(function () {
+            $workingPath = realpath(match (true) {
+                \defined('TESTBENCH_WORKING_PATH') => TESTBENCH_WORKING_PATH,
+                Env::has('TESTBENCH_WORKING_PATH') => Env::get('TESTBENCH_WORKING_PATH'),
+                default => InstalledVersions::getRootPackage()['install_path'],
+            });
+
+            return $workingPath !== false ? $workingPath : getcwd();
         });
 
         return join_paths($packagePath(), ...Arr::wrap(\func_num_args() > 1 ? \func_get_args() : $path));
