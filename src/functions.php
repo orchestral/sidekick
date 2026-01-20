@@ -41,7 +41,7 @@ if (! \function_exists('Orchestra\Sidekick\join_paths')) {
      *
      * @api
      *
-     * @deprecated
+     * @see \Orchestra\Sidekick\Filesystem\join_paths
      */
     function join_paths(?string $basePath, string ...$paths): string
     {
@@ -106,7 +106,7 @@ if (! \function_exists('Orchestra\Sidekick\is_symlink')) {
      *
      * @api
      *
-     * @deprecated
+     * @see \Orchestra\Sidekick\Filesystem\is_symlink
      */
     function is_symlink(string $path): bool
     {
