@@ -83,7 +83,7 @@ if (! \function_exists('Orchestra\Sidekick\join_paths')) {
      *
      * @api
      *
-     * @deprecated
+     * @see \Orchestra\Sidekick\Filesystem\join_paths
      */
     function join_paths(?string $basePath, string ...$paths): string
     {
@@ -144,7 +144,7 @@ if (! \function_exists('Orchestra\Sidekick\is_symlink')) {
      *
      * @api
      *
-     * @deprecated
+     * @see \Orchestra\Sidekick\Filesystem\is_symlink
      */
     function is_symlink(string $path): bool
     {
@@ -274,7 +274,7 @@ if (! \function_exists('Orchestra\Sidekick\phpunit_normalize_version')) {
         $version = transform(
             Version::id(),
             fn (string $version) => match (true) {
-                str_starts_with($version, '13.0-') => '13.0.0',
+                str_starts_with($version, '13.1-') => '13.1.0',
                 default => $version,
             }
         );
