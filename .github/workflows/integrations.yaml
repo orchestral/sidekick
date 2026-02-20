@@ -22,6 +22,8 @@ jobs:
           - 11
           - 10
           - 9
+        phpunit:
+          - '*'
         include:
           - laravel: 13
             phpunit: '^13.0'
