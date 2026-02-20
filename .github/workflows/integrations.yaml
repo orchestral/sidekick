@@ -54,7 +54,7 @@ jobs:
             phpunit: '^9.0'
             php: '8.0'
 
-    name: Laravel:${{ matrix.laravel }} / PHP:${{ matrix.php }} ${{ matrix.dependencies == 'highest' && '⬆️' || '⬇️' }}
+    name: Laravel:${{ matrix.laravel }} / PHP:${{ matrix.php }} / PHPUnit:${{ matrix.phpunit && matrix.phpunit || '*' }} ${{ matrix.dependencies == 'highest' && '⬆️' || '⬇️' }}
 
     steps:
       - name: Checkout code
