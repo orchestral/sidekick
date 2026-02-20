@@ -1,0 +1,7 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Trait Orchestra\\Sidekick\\Console\\Concerns\\ConfiguresPrompts is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Console/Concerns/ConfiguresPrompts.php

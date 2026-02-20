@@ -21,9 +21,14 @@ jobs:
           - 12
           - 11
           - 10
+        phpunit:
+          - '*'
         include:
           - laravel: 13
-            phpunit: '^12.0'
+            phpunit: '^13.0'
+            php: 8.4
+          - laravel: 13
+            phpunit: '^12.5'
             php: 8.3
           - laravel: 12
             phpunit: '^13.0'
@@ -33,9 +38,6 @@ jobs:
             php: 8.3
           - laravel: 11
             phpunit: '^12.0'
-            php: 8.3
-          - laravel: 13
-            phpunit: '^11.0'
             php: 8.3
           - laravel: 12
             phpunit: '^11.0'
@@ -47,7 +49,7 @@ jobs:
             phpunit: '^10.0'
             php: 8.1
 
-    name: Laravel:${{ matrix.laravel }} / PHP:${{ matrix.php }} ${{ matrix.dependencies == 'highest' && '⬆️' || '⬇️' }}
+    name: Laravel:${{ matrix.laravel }} / PHP:${{ matrix.php }} / PHPUnit:${{ matrix.phpunit }} ${{ matrix.dependencies == 'highest' && '⬆️' || '⬇️' }}
 
     steps:
       - name: Checkout code
@@ -74,7 +76,7 @@ jobs:
 
       - name: Execute tests
         run: |
-          vendor/bin/phpunit --no-coverage --no-configuration --dont-report-useless-tests --bootstrap vendor/autoload.php --color tests
+          vendor/bin/phpunit --no-coverage --no-configuration --bootstrap vendor/autoload.php --color tests
 
   phpunit-tests:
     runs-on: "ubuntu-latest"
@@ -89,6 +91,8 @@ jobs:
           - '^11.0'
           - '^10.0'
         include:
+          - phpunit: '^13.0'
+            php: 8.4
           - phpunit: '^12.0'
             php: 8.3
           - phpunit: '^11.0'
@@ -123,4 +127,4 @@ jobs:
 
       - name: Execute tests
         run: |
-          vendor/bin/phpunit --no-coverage --no-configuration --dont-report-useless-tests --bootstrap vendor/autoload.php --color tests
+          vendor/bin/phpunit --no-coverage --no-configuration --bootstrap vendor/autoload.php --color tests
