@@ -56,7 +56,7 @@ jobs:
             phpunit: '^9.0'
             php: '8.0'
 
-    name: Laravel:${{ matrix.laravel }} / PHP:${{ matrix.php }} / PHPUnit:${{ matrix.phpunit && matrix.phpunit || '*' }} ${{ matrix.dependencies == 'highest' && '⬆️' || '⬇️' }}
+    name: Laravel:${{ matrix.laravel }} / PHP:${{ matrix.php }} / PHPUnit:${{ matrix.phpunit }} ${{ matrix.dependencies == 'highest' && '⬆️' || '⬇️' }}
 
     steps:
       - name: Checkout code
@@ -88,7 +88,7 @@ jobs:
 
       - name: Execute tests
         run: |
-          vendor/bin/phpunit --no-coverage --no-configuration --dont-report-useless-tests --bootstrap vendor/autoload.php --color tests
+          vendor/bin/phpunit --no-coverage --no-configuration --bootstrap vendor/autoload.php --color tests
 
   phpunit-tests:
     runs-on: "ubuntu-latest"
@@ -142,4 +142,4 @@ jobs:
 
       - name: Execute tests
         run: |
-          vendor/bin/phpunit --no-coverage --no-configuration --dont-report-useless-tests --bootstrap vendor/autoload.php --color tests
+          vendor/bin/phpunit --no-coverage --no-configuration --bootstrap vendor/autoload.php --color tests
