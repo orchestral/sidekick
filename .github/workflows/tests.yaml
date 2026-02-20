@@ -40,7 +40,7 @@ jobs:
           coverage: none
 
       - name: Set package version
-        run: composer config version "1.x-dev"
+        run: composer config version "1.1.x-dev"
 
       - name: Install dependencies
         uses: "ramsey/composer-install@v3"
@@ -91,7 +91,7 @@ jobs:
           coverage: none
 
       - name: Set package version
-        run: composer config version "1.x-dev"
+        run: composer config version "1.1.x-dev"
 
       - name: Install dependencies
         uses: "ramsey/composer-install@v3"
@@ -140,7 +140,7 @@ jobs:
           coverage: none
 
       - name: Set package version
-        run: composer config version "1.x-dev"
+        run: composer config version "1.1.x-dev"
 
       - name: Install dependencies
         uses: "ramsey/composer-install@v3"
@@ -189,7 +189,7 @@ jobs:
           coverage: none
 
       - name: Set package version
-        run: composer config version "1.x-dev"
+        run: composer config version "1.1.x-dev"
 
       - name: Install dependencies
         uses: "ramsey/composer-install@v3"
