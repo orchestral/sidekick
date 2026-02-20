@@ -30,7 +30,7 @@ jobs:
           coverage: xdebug
 
       - name: Set package version
-        run: composer config version "1.x-dev"
+        run: composer config version "1.2.x-dev"
 
       - name: Install dependencies
         uses: "ramsey/composer-install@v3"
