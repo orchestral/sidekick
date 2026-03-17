@@ -24,7 +24,6 @@ class Watcher
      */
     public static function store(): WeakMap
     {
-        /** @phpstan-ignore assign.propertyType,return.type */
         return static::$cache ??= new WeakMap;
     }
 
