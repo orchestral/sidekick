@@ -9,6 +9,7 @@ use Laravel\Prompts\Prompt;
 use Laravel\Prompts\SelectPrompt;
 use Laravel\Prompts\SuggestPrompt;
 use Laravel\Prompts\TextPrompt;
+use Orchestra\Sidekick\Env;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
@@ -29,11 +30,7 @@ trait ConfiguresPrompts
     {
         Prompt::setOutput($output);
 
-        $enabled = true;
-
-        if (isset($_ENV['PROMPTS_ENABLED'])) {
-            $enabled = \in_array($_ENV['PROMPTS_ENABLED'], [true, 'true']);
-        }
+        $enabled = Env::get('PROMPTS_ENABLED', false);
 
         Prompt::fallbackWhen(! $input->isInteractive() || windows_os() || $enabled == false);
 
