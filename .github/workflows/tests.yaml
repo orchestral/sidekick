@@ -86,12 +86,8 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, intl, fileinfo
           coverage: none
 
-      - name: Set package version
-<<<<<<< HEAD
+      - name: Set package
         run: composer config version "1.2.x-dev"
-=======
-        run: composer config version "1.1.x-dev"
->>>>>>> 1.1.x
 
       - name: Install dependencies
         uses: ramsey/composer-install@v4
@@ -135,11 +131,7 @@ jobs:
           coverage: none
 
       - name: Set package version
-<<<<<<< HEAD
         run: composer config version "1.2.x-dev"
-=======
-        run: composer config version "1.1.x-dev"
->>>>>>> 1.1.x
 
       - name: Install dependencies
         uses: ramsey/composer-install@v4
@@ -150,58 +142,6 @@ jobs:
       - name: Installed dependencies
         run: composer show -D
 
-<<<<<<< HEAD
-=======
-      - name: Update PHPUnit Configuration
-        run: |
-          vendor/bin/phpunit --migrate-configuration
-
-      - name: Execute tests
-        run: |
-          vendor/bin/phpunit
-
-  tests-on-phpunit9:
-    runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.experimental }}
-    strategy:
-      matrix:
-        os:
-          - "ubuntu-latest"
-          - "windows-latest"
-        php:
-          - '8.0'
-        dependencies:
-          - "highest"
-          - "lowest"
-        experimental:
-          - false
-
-    name: PHPUnit:9 / PHP:${{ matrix.php }} / OS:${{ matrix.os }} ${{ matrix.dependencies == 'highest' && '⬆️' || '⬇️' }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, intl, fileinfo
-          coverage: none
-
-      - name: Set package version
-        run: composer config version "1.1.x-dev"
-
-      - name: Install dependencies
-        uses: ramsey/composer-install@v4
-        with:
-          dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--prefer-dist --no-cache --with=phpunit/phpunit:^9.6"
-
-      - name: Installed dependencies
-        run: composer show -D
-
->>>>>>> 1.1.x
       - name: Execute tests
         run: |
           vendor/bin/phpunit
