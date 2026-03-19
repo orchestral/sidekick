@@ -304,10 +304,13 @@ if (! \function_exists('Orchestra\Sidekick\package_version_compare')) {
                 throw new RuntimeException(\sprintf('Unable to compare "%s" version', $package));
             }
 
-            $versionRanges = explode(' || ', InstalledVersions::getVersionRanges($package));
+            $versionRanges = array_map(
+                fn ($version) => (new VersionParser)->normalize($version),
+                explode(' || ', InstalledVersions::getVersionRanges($package))
+            );
 
             return ! empty(
-                Semver::satisfiedBy($versionRanges, sprintf('%s%s', $operator ?? '=', $version))
+                Semver::satisfiedBy($versionRanges, \sprintf('%s%s', $operator ?? '=', $version))
             );
         }
 
