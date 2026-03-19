@@ -4,6 +4,7 @@ namespace Orchestra\Sidekick;
 
 use Closure;
 use Composer\InstalledVersions;
+use Composer\Semver\Semver;
 use Composer\Semver\VersionParser;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Illuminate\Foundation\Application;
@@ -299,7 +300,15 @@ if (! \function_exists('Orchestra\Sidekick\package_version_compare')) {
         $prettyVersion = InstalledVersions::getPrettyVersion($package);
 
         if (\is_null($prettyVersion)) {
-            throw new RuntimeException(\sprintf('Unable to compare "%s" version', $package));
+            if (array_search($package, InstalledVersions::getInstalledPackages()) === false) {
+                throw new RuntimeException(\sprintf('Unable to compare "%s" version', $package));
+            }
+
+            $versionRanges = explode(' || ', InstalledVersions::getVersionRanges($package));
+
+            return ! empty(
+                Semver::satisfiedBy($versionRanges, sprintf('%s%s', $operator ?? '=', $version))
+            );
         }
 
         $versionParser = new VersionParser;
