@@ -5,6 +5,7 @@ namespace Orchestra\Sidekick\Tests\Unit\Functions;
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 
+use function Orchestra\Sidekick\laravel_normalize_version;
 use function Orchestra\Sidekick\package_version_compare;
 use function Orchestra\Sidekick\phpunit_normalize_version;
 
@@ -13,6 +14,21 @@ class PackageVersionCompareTest extends TestCase
     public function test_it_can_evaluate_package_version()
     {
         $this->assertTrue(package_version_compare('phpunit/phpunit', phpunit_normalize_version(), '='));
+        $this->assertTrue(package_version_compare('phpunit/phpunit', phpunit_normalize_version(), '<='));
+        $this->assertTrue(package_version_compare('phpunit/phpunit', phpunit_normalize_version(), '>='));
+
+        $this->assertFalse(package_version_compare('phpunit/phpunit', phpunit_normalize_version(), '<'));
+        $this->assertFalse(package_version_compare('phpunit/phpunit', phpunit_normalize_version(), '>'));
+    }
+
+    public function test_it_can_evaluate_provided_package_version()
+    {
+        $this->assertTrue(package_version_compare('illuminate/support', laravel_normalize_version(), '='));
+        $this->assertTrue(package_version_compare('illuminate/support', laravel_normalize_version(), '<='));
+        $this->assertTrue(package_version_compare('illuminate/support', laravel_normalize_version(), '>='));
+
+        $this->assertFalse(package_version_compare('illuminate/support', laravel_normalize_version(), '<'));
+        $this->assertFalse(package_version_compare('illuminate/support', laravel_normalize_version(), '>'));
     }
 
     public function test_it_throws_exception_when_package_is_not_installed()
