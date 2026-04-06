@@ -248,7 +248,7 @@ if (! \function_exists('Orchestra\Sidekick\laravel_normalize_version')) {
         $version = transform(
             Application::VERSION,
             fn (string $version) => match ($version) {
-                '13.x-dev' => '13.0.0',
+                '14.x-dev' => '14.0.0',
                 default => $version,
             }
         );
@@ -275,7 +275,7 @@ if (! \function_exists('Orchestra\Sidekick\phpunit_normalize_version')) {
         $version = transform(
             Version::id(),
             fn (string $version) => match (true) {
-                str_starts_with($version, '13.1-') => '13.1.0',
+                str_starts_with($version, '13.2-') => '13.2.0',
                 default => $version,
             }
         );
