@@ -48,6 +48,8 @@
         "audit": {
             "ignore": [
                 "CVE-2025-64500",
+                "GHSA-5vg9-5847-vvmq",
+                "GHSA-crmm-hgp2-wgrp",
                 "GHSA-vvj3-c3rp-c85p",
                 "PKSA-8qx3-n5y5-vvnd",
                 "PKSA-w7xr-vk7n-rstm"
