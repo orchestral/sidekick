@@ -224,8 +224,6 @@ if (! \function_exists('Orchestra\Sidekick\php_normalize_version')) {
      * PHP normalize version.
      *
      * @api
-     *
-     * @throws \OutOfBoundsException
      */
     function php_normalize_version(): string
     {
