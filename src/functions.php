@@ -219,6 +219,24 @@ if (! \function_exists('Orchestra\Sidekick\laravel_normalize_version')) {
     }
 }
 
+if (! \function_exists('Orchestra\Sidekick\php_normalize_version')) {
+    /**
+     * PHP normalize version.
+     *
+     * @api
+     */
+    function php_normalize_version(): string
+    {
+        /** @var string $version */
+        $version = match (true) {
+            str_ends_with('-dev', PHP_VERSION) && PHP_VERSION_ID === 80600 => '8.6.0', // @phpstan-ignore booleanAnd.alwaysFalse,identical.alwaysFalse
+            default => phpversion(),
+        };
+
+        return (new VersionParser)->normalize($version);
+    }
+}
+
 if (! \function_exists('Orchestra\Sidekick\phpunit_normalize_version')) {
     /**
      * PHPUnit normalize version.
@@ -275,6 +293,32 @@ if (! \function_exists('Orchestra\Sidekick\laravel_version_compare')) {
         }
 
         return version_compare($laravel, $version, $operator);
+    }
+}
+
+if (! \function_exists('Orchestra\Sidekick\php_version_compare')) {
+    /**
+     * PHP version compare.
+     *
+     * @api
+     *
+     * @template TOperator of string|null
+     *
+     * @param  TOperator  $operator
+     * @return (TOperator is null ? int : bool)
+     *
+     * @codeCoverageIgnore
+     */
+    function php_version_compare(string $version, ?string $operator = null): int|bool
+    {
+        $php = php_normalize_version();
+        $version = (new VersionParser)->normalize($version);
+
+        if (\is_null($operator)) {
+            return version_compare($php, $version);
+        }
+
+        return version_compare($php, $version, $operator);
     }
 }
 
