@@ -9,10 +9,8 @@ class Task
     /**
      * Construct a new pending task.
      *
-     * @template TActionResponse of bool
-     *
-     * @param  \Closure():(TActionResponse)  $action
-     * @param  (\Closure(TActionResponse, bool):(void))|null  $response
+     * @param  \Closure():(bool)  $action
+     * @param  (\Closure(bool, bool):(void))|null  $response
      * @param  (\Closure():(bool))|bool  $requirement
      */
     public function __construct(
@@ -72,15 +70,10 @@ class Task
             return;
         }
 
-        if ($pretending === true) {
-            /** @phpstan-ignore argument.type */
-            value($this->response, true, $pretending);
+        /** @var bool $action */
+        $action = $pretending === true ? true : \call_user_func($this->action);
 
-            return;
-        }
-
-        /** @phpstan-ignore argument.type */
-        value($this->response, \call_user_func($this->action), $pretending);
+        value($this->response, $action, $pretending);
     }
 
     /**
