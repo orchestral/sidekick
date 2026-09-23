@@ -267,7 +267,7 @@ if (! \function_exists('Orchestra\Sidekick\php_normalize_version')) {
     {
         /** @var string $version */
         $version = match (true) {
-            str_ends_with('-dev', PHP_VERSION) && PHP_VERSION_ID === 80600 => '8.6.0', // @phpstan-ignore booleanAnd.alwaysFalse,identical.alwaysFalse
+            str_ends_with('-dev', PHP_VERSION) && PHP_VERSION_ID === 80600 => '8.6.0',
             default => phpversion(),
         };
 
