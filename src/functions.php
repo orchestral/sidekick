@@ -235,7 +235,7 @@ if (! \function_exists('Orchestra\Sidekick\phpunit_normalize_version')) {
 
         /** @var string $version */
         $version = match (true) {
-            str_contains(Version::id(), '-') => sprintf('%s.0', Version::id()),
+            str_contains(Version::id(), '-') => \sprintf('%s.0', Version::id()),
             default => Version::id(),
         };
 
