@@ -29,6 +29,7 @@ class Task
      */
     public static function action(Closure $action)
     {
+        /** @phpstan-ignore new.static */
         return new static($action);
     }
 
@@ -60,9 +61,6 @@ class Task
 
     /**
      * Handle the task.
-     *
-     * @param  bool  $pretending
-     * @return void
      */
     public function dispatch(bool $pretending = false): void
     {
@@ -73,14 +71,12 @@ class Task
         /** @var bool $action */
         $action = $pretending === true ? true : \call_user_func($this->action);
 
+        /** @phpstan-ignore argument.type */
         value($this->response, $action, $pretending);
     }
 
     /**
      * Handle the task when invoked.
-     *
-     * @param  bool  $pretending
-     * @return void
      */
     public function __invoke(bool $pretending = false): void
     {
