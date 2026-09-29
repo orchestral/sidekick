@@ -27,6 +27,15 @@ jobs:
           - "lowest"
         experimental:
           - false
+        include:
+          - php: 8.6
+            os: "ubuntu-latest"
+            dependencies: "highest"
+            experimental: true
+          - php: 8.6
+            os: "windows-latest"
+            dependencies: "highest"
+            experimental: true
 
     name: PHPUnit:12 / PHP:${{ matrix.php }} / OS:${{ matrix.os }} ${{ matrix.dependencies == 'highest' && '⬆️' || '⬇️' }}
 
@@ -48,7 +57,7 @@ jobs:
         uses: ramsey/composer-install@v4
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--prefer-dist --no-cache --with=phpunit/phpunit:^13.0"
+          composer-options: "--prefer-dist --no-cache --with=phpunit/phpunit:^13.0 ${{ matrix.experimental == true && '--ignore-platform-reqs' || '' }}"
 
       - name: Installed dependencies
         run: composer show -D
