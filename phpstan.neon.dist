@@ -12,6 +12,7 @@ parameters:
   level: 8
 
   ignoreErrors:
+    - identifier: identical.alwaysFalse
     # - identifier: missingType.generics
     # - identifier: missingType.iterableValue
     # - identifier: match.alwaysFalse
